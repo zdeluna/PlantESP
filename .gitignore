@@ -27,7 +27,5 @@ yarn.lock
 yarn-error.log
 package-lock.json
 *.env
-client/src/static/images/Architecture.afdesign
-cloud_sql_proxy
-.gcloudignore
 AWSCLIV2.pkg
+*.json
