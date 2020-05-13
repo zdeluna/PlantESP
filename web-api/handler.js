@@ -1,5 +1,5 @@
 "use strict";
-const connectToDatabase = require("./db");
+const connectToDatabase = require("./db3");
 
 function HTTPError(statusCode, message) {
     const error = new Error(message);
@@ -10,12 +10,35 @@ function HTTPError(statusCode, message) {
 }
 
 module.exports.healthCheck = async () => {
-    await connectToDatabase();
-    console.log("Connection successful. ");
-    return {
-        statusCode: 200,
-        body: JSON.stringify({ message: "Connection successful." })
-    };
+    try {
+        await connectToDatabase();
+        console.log("Connection successful. ");
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: "Connection successful." })
+        };
+    } catch (error) {
+        console.log(error);
+        console.log("ERROR");
+    }
+};
+
+module.exports.create = async event => {
+    try {
+        const { User } = await connectToDatabase();
+        const user = await User.create(JSON.parse(event.body));
+        return {
+            statusCode: 200,
+            body: JSON.stringify(user)
+        };
+    } catch (error) {
+        console.log(error);
+        return {
+            statusCode: error.statusCode || 500,
+            headers: { "Content-Type": "text/plain" },
+            body: "Could not create the user."
+        };
+    }
 };
 
 module.exports.hello = async event => {

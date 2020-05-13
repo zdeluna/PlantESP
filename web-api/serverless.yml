@@ -53,5 +53,12 @@ functions:
                 path: healthCheck
                 method: post
                 cors: true
+    create:
+        handler: handler.create
+        events:
+            - http:
+                path: user
+                method: post
+                cors: true
 plugins:
     - serverless-offline
