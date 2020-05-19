@@ -20,20 +20,35 @@ service: graphql
 # Check out our docs for more details
 # frameworkVersion: "=X.X.X"
 
+custom:
+    secrets: ${file(secrets.json)}
+    serverless-offline:
+        port: 4000
+    webpackIncludeModules: true
+     
 provider:
-  name: aws
-  runtime: nodejs12.x
-  stage: dev
-  region: us-east-2
+    name: aws
+    runtime: nodejs12.x
+    region: us-east-2
+    stage: ${self:custom.secrets.NODE_ENV}
+    environment:
+        NODE_ENV: ${self:custom.secrets.NODE_ENV}
+        DB_NAME: ${self:custom.secrets.DB_NAME}
+        DB_USER: ${self:custom.secrets.DB_USER}
+        DB_PASSWORD: ${self:custom.secrets.DB_PASSWORD}
+        DB_HOST: ${self:custom.secrets.DB_HOST}
+        DB_PORT: ${self:custom.secrets.DB_PORT}
+    vpc:
+        securityGroupIds:
+            - ${self:custom.secrets.SECURITY_GROUP_ID}
+        subnetIds:
+            - ${self:custom.secrets.SUBNET1_ID}
+            - ${self:custom.secrets.SUBNET2_ID}
 
 plugins:
     - serverless-offline
     - serverless-webpack
 
-custom:
-    serverless-offline:
-        port: 4000
-    webpackIncludeModules: true
 
 functions:
   graphql:
@@ -46,6 +61,7 @@ functions:
     - http:
         path: graphql
         method: get
+        cors: true
 
   hello:
     handler: handler.hello

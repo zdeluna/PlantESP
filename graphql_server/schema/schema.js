@@ -1,6 +1,9 @@
 const schema = `
-type Query {
-    getUser(id: String!): User!
+
+type CreateUserResponse {
+    user: User
+    success: Boolean!
+    message: String
 }
 
 type User {
@@ -8,8 +11,17 @@ type User {
     email: String!
 }
 
+type Query {
+    getUser(id: String!): User!
+}
+
+type Mutation {
+    createUser(email: String!): CreateUserResponse!
+}
+
 schema {
-    query: Query
+    query: Query,
+    mutation: Mutation
 }`;
 
 export { schema };

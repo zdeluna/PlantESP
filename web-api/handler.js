@@ -1,5 +1,5 @@
 "use strict";
-const connectToDatabase = require("../config/db");
+const connectToDatabase = require("./config/db");
 
 function HTTPError(statusCode, message) {
     const error = new Error(message);
