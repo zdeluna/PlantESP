@@ -22,7 +22,8 @@ const server = new ApolloServer({
         headers: event.headers,
         functionName: context.functionName,
         event,
-        context
+        context,
+        secret: process.env.SECRET
     }),
     /*
     context: ({ context, event }) => {

@@ -7,16 +7,23 @@ type CreateUserResponse {
 }
 
 type User {
-    id: String!
+    id: ID!
+    username: String!
+    password: String!
     email: String!
 }
+
+type Token {
+    token: String!
+}
+
 
 type Query {
     getUser(id: String!): User!
 }
 
 type Mutation {
-    createUser(email: String!): CreateUserResponse!
+    createUser(email: String!, username: String!, password: String!): Token!
 }
 
 schema {

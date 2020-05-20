@@ -1,5 +1,3 @@
-const Sequelize = require("sequelize");
-
 module.exports = (sequelize, type) => {
     return sequelize.define("user", {
         id: {
@@ -8,7 +6,16 @@ module.exports = (sequelize, type) => {
             autoIncrement: true
         },
         email: {
-            type: Sequelize.STRING,
+            type: type.STRING,
+            allowNull: false
+        },
+        username: {
+            type: type.STRING,
+            unique: true,
+            allowNull: false
+        },
+        password: {
+            type: type.STRING,
             allowNull: false
         }
     });

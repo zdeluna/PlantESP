@@ -1,5 +1,13 @@
 "use strict";
+const jwt = require("jsonwebtoken");
 const connectToDatabase = require("./config/db");
+
+const createToken = async (user, secret, expiresIn) => {
+    const { id, email, username } = user;
+    return await jwt.sign({ id, email, username }, secret, {
+        expiresIn
+    });
+};
 
 const getUser = async args => {
     const { User } = await connectToDatabase();
@@ -8,14 +16,12 @@ const getUser = async args => {
     return { email: "usertest@gmail.com", id: "1" };
 };
 
-const createUser = async (args, context) => {
+const createUser = async ({ username, email, password }, { secret }) => {
     const { User } = await connectToDatabase();
-    const user = await User.create(args);
+    const user = await User.create({ username, email, password });
 
     return {
-        user: user,
-        success: true,
-        message: "The  user was created successfully"
+        token: createToken(user, secret, "30m")
     };
 };
 
@@ -24,6 +30,7 @@ export const resolvers = {
         getUser: (root, args) => getUser(args)
     },
     Mutation: {
-        createUser: (root, args, context) => createUser(args, context)
+        createUser: (root, { username, email, password }, { secret }) =>
+            createUser({ username, email, password }, { secret })
     }
 };
