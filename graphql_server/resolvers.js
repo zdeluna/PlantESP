@@ -16,7 +16,7 @@ const getUser = async args => {
     return { email: "usertest@gmail.com", id: "1" };
 };
 
-const createUser = async ({ username, email, password }, { secret }) => {
+const createUser = async ({ username, email, password }, secret) => {
     const { User } = await connectToDatabase();
     const user = await User.create({ username, email, password });
 
@@ -31,6 +31,6 @@ export const resolvers = {
     },
     Mutation: {
         createUser: (root, { username, email, password }, { secret }) =>
-            createUser({ username, email, password }, { secret })
+            createUser({ username, email, password }, secret)
     }
 };

@@ -38,6 +38,7 @@ provider:
         DB_PASSWORD: ${self:custom.secrets.DB_PASSWORD}
         DB_HOST: ${self:custom.secrets.DB_HOST}
         DB_PORT: ${self:custom.secrets.DB_PORT}
+        SECRET: ${self:custom.secrets.SECRET}
     vpc:
         securityGroupIds:
             - ${self:custom.secrets.SECURITY_GROUP_ID}
@@ -48,7 +49,6 @@ provider:
 plugins:
     - serverless-offline
     - serverless-webpack
-
 
 functions:
   graphql:
