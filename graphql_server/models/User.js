@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-    return sequelize.define("user", {
+    const User = sequelize.define("user", {
         id: {
             type: type.INTEGER,
             primaryKey: true,
@@ -7,16 +7,30 @@ module.exports = (sequelize, type) => {
         },
         email: {
             type: type.STRING,
-            allowNull: false
+            allowNull: true
         },
         username: {
             type: type.STRING,
-            unique: true,
-            allowNull: false
+            unique: true
         },
         password: {
-            type: type.STRING,
-            allowNull: false
+            type: type.STRING
         }
     });
+
+    /* First try to find user by username */
+    User.findByLogin = async login => {
+        let user = await User.findOne({
+            where: { username: login }
+        });
+
+        if (!user) {
+            user = await User.findOne({
+                where: { email: login }
+            });
+        }
+        return user;
+    };
+
+    return User;
 };

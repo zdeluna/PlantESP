@@ -23,7 +23,8 @@ type Query {
 }
 
 type Mutation {
-    createUser(email: String!, username: String!, password: String!): Token!
+    createUser(email: String!, username: String!, password: String!): Token
+    signInUser(login: String!, password: String!): Token!
 }
 
 schema {

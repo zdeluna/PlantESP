@@ -1,6 +1,6 @@
-const UserModel = require("../models/User");
 const Sequelize = require("sequelize");
 const mysql2 = require("mysql2");
+const UserModel = require("../models/User");
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
