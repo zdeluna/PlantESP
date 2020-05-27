@@ -42,6 +42,12 @@ const signInUser = async ({ login, password }, secret) => {
         throw new UserInputError("No user was found");
     }
 
+    const isValid = await user.validatePassword(password);
+
+    if (!isValid) {
+        throw new AuthenticationError("Password is not valid");
+    }
+
     return { token: createToken(user, secret, "30m") };
 };
 
