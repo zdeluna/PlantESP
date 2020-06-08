@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React from 'react';
+import React, {Component} from 'react';
 import {
     SafeAreaView,
     StyleSheet,
@@ -31,7 +31,7 @@ import {setContext} from 'apollo-link-context';
 import {onError} from 'apollo-link-error';
 import {ApolloProvider} from '@apollo/react-hooks';
 import {from} from 'apollo-boost';
-import {Home} from './Home';
+import Home from './Home';
 
 let GRAPHQL_URI =
     'https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql';
@@ -78,12 +78,13 @@ const client = new ApolloClient({
     link: from([authLink, errorLink, httpLink]),
 });
 
-const App: () => React$Node = () => {
-    return (
-        <ApolloProvider client={client}>
-            <Home />
-        </ApolloProvider>
-    );
-};
+class App extends Component {
+    render() {
+        return <Home />;
+
+        //<ApolloProvider client={client}
+        //</ApolloProvider>
+    }
+}
 
 export default App;
