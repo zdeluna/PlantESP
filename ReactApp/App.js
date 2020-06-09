@@ -80,10 +80,11 @@ const client = new ApolloClient({
 
 class App extends Component {
     render() {
-        return <Home />;
-
-        //<ApolloProvider client={client}
-        //</ApolloProvider>
+        return (
+            <ApolloProvider client={client}>
+                <Home />
+            </ApolloProvider>
+        );
     }
 }
 
