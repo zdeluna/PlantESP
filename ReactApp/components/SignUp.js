@@ -22,6 +22,20 @@ const SignUp = props => {
         },
     });
 
+    const handleCreateUser = () => {
+        console.log('handleCreateUser function');
+        console.log(formValues.username);
+        console.log(formValues.email);
+        console.log(formValues.password);
+        createUser({
+            variables: {
+                username: formValues.username,
+                email: formValues.email,
+                password: formValues.password,
+            },
+        });
+    };
+
     return (
         <View style={styles.container}>
             <Text
@@ -55,7 +69,7 @@ const SignUp = props => {
             />
             <Button
                 style={styles.button}
-                onPress={createUser}
+                onPress={handleCreateUser}
                 title="Sign Up"
             />
         </View>
