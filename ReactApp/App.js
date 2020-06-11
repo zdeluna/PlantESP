@@ -32,6 +32,7 @@ import {onError} from 'apollo-link-error';
 import {ApolloProvider} from '@apollo/react-hooks';
 import {from} from 'apollo-boost';
 import Home from './Home';
+import AsyncStorage from '@react-native-community/async-storage';
 
 let GRAPHQL_URI =
     'https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql';
@@ -60,9 +61,8 @@ const errorLink = onError(({graphQLErrors, networkError}) => {
     if (networkError) console.log(`[Network error]: ${networkError}`);
 });
 
-const authLink = setContext((_, {headers}) => {
-    // get the authentication token from local storage if it exists
-    const token = '123'; //localStorage.getItem('token');
+const authLink = setContext(async (_, {headers}) => {
+    const token = await AsyncStorage.getItem('token');
     return {
         headers: {
             ...headers,

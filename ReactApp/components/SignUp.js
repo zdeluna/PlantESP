@@ -6,6 +6,7 @@ import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {CREATE_USER} from '../graphql/mutations/user/createUser';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
+import AsyncStorage from '@react-native-community/async-storage';
 
 const SignUp = props => {
     const [formValues, handleFormValueChange, setFormValues] = formData({
@@ -17,16 +18,12 @@ const SignUp = props => {
     const client = useApolloClient();
 
     const [createUser] = useMutation(CREATE_USER, {
-        onCompleted({createUser}) {
-            console.log(createUser);
+        async onCompleted({createUser}) {
+            await AsyncStorage.setItem('token', createUser.token);
         },
     });
 
     const handleCreateUser = () => {
-        console.log('handleCreateUser function');
-        console.log(formValues.username);
-        console.log(formValues.email);
-        console.log(formValues.password);
         createUser({
             variables: {
                 username: formValues.username,
