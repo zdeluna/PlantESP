@@ -4,30 +4,30 @@ import FormField from './FormField';
 import formData from './FormData';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {CREATE_USER} from '../graphql/mutations/user/createUser';
+import {LOG_IN_USER} from '../graphql/mutations/user/signInUser';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const SignUp = props => {
+const Login = props => {
     const [formValues, handleFormValueChange, setFormValues] = formData({
-        username: '',
-        email: '',
+        login: '',
         password: '',
     });
 
     const client = useApolloClient();
 
-    const [createUser] = useMutation(CREATE_USER, {
-        async onCompleted({createUser}) {
-            await AsyncStorage.setItem('token', createUser.token);
+    const [signInUser] = useMutation(LOG_IN_USER, {
+        async onCompleted({signInUser}) {
+            console.log('logged in');
+            await AsyncStorage.setItem('token', signInUser.token);
+            console.log(signInUser.token);
         },
     });
 
-    const handleCreateUser = () => {
-        createUser({
+    const handleLogInUser = () => {
+        signInUser({
             variables: {
-                username: formValues.username,
-                email: formValues.email,
+                login: formValues.login,
                 password: formValues.password,
             },
         });
@@ -42,21 +42,14 @@ const SignUp = props => {
                     fontWeight: '300',
                     paddingBottom: 30,
                 }}>
-                Sign Up
+                Log In
             </Text>
             <FormField
-                label="Username"
-                formKey="username"
-                placeholder="Your username"
-                textInputProps={{autoCapitalize: 'none'}}
+                label="Username or Email"
+                formKey="login"
+                placeholder="Your username or email"
                 handleFormValueChange={handleFormValueChange}
-            />
-            <FormField
-                label="Email"
-                formKey="email"
-                placeholder="Your email"
                 textInputProps={{autoCapitalize: 'none'}}
-                handleFormValueChange={handleFormValueChange}
             />
             <FormField
                 label="Password"
@@ -67,8 +60,8 @@ const SignUp = props => {
             />
             <Button
                 style={styles.button}
-                onPress={handleCreateUser}
-                title="Sign Up"
+                onPress={handleLogInUser}
+                title="Log In"
             />
         </View>
     );
@@ -94,4 +87,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default SignUp;
+export default Login;

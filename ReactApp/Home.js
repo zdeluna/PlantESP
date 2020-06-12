@@ -18,13 +18,14 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 
 import SignUp from './components/SignUp';
+import Login from './components/Login';
 
 const Home = props => {
     const [email, setEmail] = useState('');
 
     return (
         <>
-            <SignUp />
+            <Login />
         </>
     );
 };
