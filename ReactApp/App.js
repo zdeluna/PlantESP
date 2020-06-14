@@ -24,6 +24,7 @@ import {
     ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
+import 'react-native-gesture-handler';
 import {ApolloClient} from 'apollo-client';
 import {InMemoryCache} from 'apollo-cache-inmemory';
 import {createHttpLink} from 'apollo-link-http';
@@ -33,6 +34,7 @@ import {ApolloProvider} from '@apollo/react-hooks';
 import {from} from 'apollo-boost';
 import Home from './Home';
 import AsyncStorage from '@react-native-community/async-storage';
+import {Routes} from './src/Routes';
 
 let GRAPHQL_URI =
     'https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql';
@@ -81,7 +83,7 @@ class App extends Component {
     render() {
         return (
             <ApolloProvider client={client}>
-                <Home />
+                <Routes />
             </ApolloProvider>
         );
     }

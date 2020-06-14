@@ -8,7 +8,7 @@ import {LOG_IN_USER} from '../graphql/mutations/user/signInUser';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
-const Login = props => {
+const Login = ({navigation}) => {
     const [formValues, handleFormValueChange, setFormValues] = formData({
         login: '',
         password: '',
@@ -62,6 +62,13 @@ const Login = props => {
                 style={styles.button}
                 onPress={handleLogInUser}
                 title="Log In"
+            />
+            <Button
+                style={styles.button}
+                title="Not registered?"
+                onPress={() => {
+                    navigation.navigate('SignUp');
+                }}
             />
         </View>
     );
