@@ -1,12 +1,11 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import FormField from './FormField';
 import formData from './FormData';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {LOG_IN_USER} from '../graphql/mutations/user/signInUser';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
-import AsyncStorage from '@react-native-community/async-storage';
+import {AuthContext} from '../src/AuthProvider';
 
 const Login = ({navigation}) => {
     const [formValues, handleFormValueChange, setFormValues] = formData({
@@ -14,23 +13,10 @@ const Login = ({navigation}) => {
         password: '',
     });
 
-    const client = useApolloClient();
-
-    const [signInUser] = useMutation(LOG_IN_USER, {
-        async onCompleted({signInUser}) {
-            console.log('logged in');
-            await AsyncStorage.setItem('token', signInUser.token);
-            console.log(signInUser.token);
-        },
-    });
+    const {login} = useContext(AuthContext);
 
     const handleLogInUser = () => {
-        signInUser({
-            variables: {
-                login: formValues.login,
-                password: formValues.password,
-            },
-        });
+        login(formValues.login, formValues.password);
     };
 
     return (
