@@ -20,7 +20,7 @@ export const AuthProvider = ({children}) => {
     const [signInUser] = useMutation(LOG_IN_USER, {
         async onCompleted({signInUser}) {
             console.log('logged in');
-            await AsyncStorage.setItem('user', signInUser.token);
+            AsyncStorage.setItem('user', signInUser.token);
             console.log(signInUser.token);
             setUser(signInUser.token);
         },
@@ -38,7 +38,10 @@ export const AuthProvider = ({children}) => {
                         },
                     });
                 },
-                logout: () => {},
+                logout: () => {
+                    setUser(null);
+                    AsyncStorage.removeItem('user');
+                },
             }}>
             {children}
         </AuthContext.Provider>
