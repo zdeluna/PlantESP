@@ -23,6 +23,10 @@ module.exports = (sequelize, type) => {
         }
     });
 
+    User.associate = models => {
+        User.hasMany(models.Message);
+    };
+
     /* First try to find user by username */
     User.findByLogin = async login => {
         let user = await User.findOne({
