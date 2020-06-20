@@ -29,8 +29,6 @@ type CreatePlantResponse {
     id: ID!
 }
 
-
-
 type Query {
     getUser(id: String!): User!
 }
@@ -38,7 +36,7 @@ type Query {
 type Mutation {
     createUser(email: String!, username: String!, password: String!): Token
     signInUser(login: String!, password: String!): Token!
-    createPlant(name: String!, userId: ID!): CreatePlantResponse
+    createPlant(name: String!): CreatePlantResponse
 }
 
 schema {

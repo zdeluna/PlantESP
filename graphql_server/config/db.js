@@ -1,6 +1,7 @@
 const Sequelize = require("sequelize");
 const mysql2 = require("mysql2");
 const UserModel = require("../models/User");
+const PlantModel = require("../models/Plant");
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -16,8 +17,15 @@ const sequelize = new Sequelize(
 
 const connection = {};
 const User = UserModel(sequelize, Sequelize);
+const Plant = UserModel(sequelize, Sequelize);
 
-const Models = { User };
+const Models = { User: User, Plant: Plant };
+
+Object.keys(Models).forEach(key => {
+    if ("associate" in Models[key]) {
+        Models[key].associate(Models);
+    }
+});
 
 module.exports = async () => {
     try {

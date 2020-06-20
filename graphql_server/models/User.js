@@ -24,7 +24,7 @@ module.exports = (sequelize, type) => {
     });
 
     User.associate = models => {
-        User.hasMany(models.Message);
+        User.hasMany(models.Plant);
     };
 
     /* First try to find user by username */
