@@ -3,6 +3,17 @@ import { AuthenticationError, UserInputError } from "apollo-server";
 const jwt = require("jsonwebtoken");
 const connectToDatabase = require("./config/db");
 
+const createPlant = async ({ name }, { token }) => {
+    try {
+        const { Plant } = await connectToDatabase();
+        const plant = await Plant.create({ name });
+        return {
+            success: true,
+            id: plant.id
+        };
+    } catch (error) {}
+};
+
 const createToken = async (user, secret, expiresIn) => {
     const { id, email, username } = user;
     return await jwt.sign({ id, email, username }, secret, {
@@ -34,7 +45,7 @@ const createUser = async ({ username, email, password }, { secret }) => {
     }
 };
 
-const signInUser = async ({ login, password }, secret) => {
+const signInUser = async ({ login, password }, { secret }) => {
     const { User } = await connectToDatabase();
 
     const user = await User.findByLogin(login);
@@ -60,7 +71,10 @@ export const resolvers = {
             return createUser({ username, email, password }, { secret });
         },
         signInUser: (root, { login, password }, { secret }) => {
-            return signInUser({ login, password }, secret);
+            return signInUser({ login, password }, { secret });
+        },
+        createPlant: (root, { name }, { token }) => {
+            return createPlant({ name }, { token });
         }
     }
 };

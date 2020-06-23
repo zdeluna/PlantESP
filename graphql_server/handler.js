@@ -3,6 +3,11 @@ const { ApolloServer } = require("apollo-server-lambda");
 const { schema } = require("./schema/schema");
 const { resolvers } = require("./resolvers");
 
+const getToken = async headers => {
+    const auth = (headers && headers.Authorization) || "";
+    return auth;
+};
+
 const server = new ApolloServer({
     typeDefs: schema,
     resolvers,
@@ -18,13 +23,18 @@ const server = new ApolloServer({
         return response;
     },
 
-    context: ({ event, context }) => ({
-        secret: process.env.SECRET,
-        headers: event.headers,
-        functionName: context.functionName,
-        event,
-        context
-    }),
+    context: async ({ event, context }) => {
+        const token = await getToken(event.headers);
+
+        return {
+            secret: process.env.SECRET,
+            headers: event.headers,
+            functionName: context.functionName,
+            event,
+            context,
+            token
+        };
+    },
     /*
     context: ({ context, event }) => {
         context.callbackWaitsForEmptyEventLoop = false;
@@ -34,7 +44,8 @@ const server = new ApolloServer({
 
 module.exports.graphqlHandler = server.createHandler({
     cors: {
-        origin: "*"
+        origin: "*",
+        credentials: true
     }
 });
 
