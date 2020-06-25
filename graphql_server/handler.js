@@ -2,6 +2,17 @@
 const { ApolloServer } = require("apollo-server-lambda");
 const { schema } = require("./schema/schema");
 const { resolvers } = require("./resolvers");
+const jwt = require("jsonwebtoken");
+
+const getUserId = async token => {
+    const tokenString = token.replace("Bearer ", "");
+    try {
+        let decoded = jwt.verify(tokenString, process.env.SECRET);
+        return decoded.id;
+    } catch (error) {
+        return "";
+    }
+};
 
 const getToken = async headers => {
     const auth = (headers && headers.Authorization) || "";
@@ -25,6 +36,7 @@ const server = new ApolloServer({
 
     context: async ({ event, context }) => {
         const token = await getToken(event.headers);
+        const userId = await getUserId(token);
 
         return {
             secret: process.env.SECRET,
@@ -32,7 +44,7 @@ const server = new ApolloServer({
             functionName: context.functionName,
             event,
             context,
-            token
+            userId
         };
     },
     /*

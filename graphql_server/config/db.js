@@ -17,7 +17,7 @@ const sequelize = new Sequelize(
 
 const connection = {};
 const User = UserModel(sequelize, Sequelize);
-const Plant = UserModel(sequelize, Sequelize);
+const Plant = PlantModel(sequelize, Sequelize);
 
 const Models = { User: User, Plant: Plant };
 
@@ -33,10 +33,8 @@ module.exports = async () => {
             console.log("Using connection");
             return Models;
         }
-
         await sequelize.sync();
         await sequelize.authenticate();
-        console.log(sequelize);
         connection.isConnected = true;
         console.log("Created new connection");
         return Models;
