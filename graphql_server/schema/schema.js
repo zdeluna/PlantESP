@@ -30,7 +30,8 @@ type CreatePlantResponse {
 }
 
 type Query {
-    getUser(id: String!): User!
+    users(id: String!): User!
+    plants:[Plant]
 }
 
 type Mutation {
