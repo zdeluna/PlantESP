@@ -1,32 +1,7 @@
 "use strict";
 import { AuthenticationError, UserInputError } from "apollo-server";
 const jwt = require("jsonwebtoken");
-const connectToDatabase = require("./config/db");
-
-const getPlants = async userId => {
-    try {
-        const { Plant } = await connectToDatabase();
-        const plants = await Plant.findAll({
-            where: {
-                userId: userId
-            }
-        });
-        console.log("Print plants");
-        console.log(plants);
-        return plants;
-    } catch (error) {}
-};
-
-const createPlant = async ({ name }, { userId }) => {
-    try {
-        const { Plant } = await connectToDatabase();
-        const plant = await Plant.create({ name, userId });
-        return {
-            success: true,
-            id: plant.id
-        };
-    } catch (error) {}
-};
+const connectToDatabase = require("../config/db");
 
 const createToken = async (user, secret, expiresIn) => {
     const { id, email, username } = user;
@@ -76,14 +51,10 @@ const signInUser = async ({ login, password }, { secret }) => {
     return { token: createToken(user, secret, "30m") };
 };
 
-export const resolvers = {
+export default {
     Query: {
         users: (root, args) => {
             return getUser(args);
-        },
-        plants: (root, args, { userId }) => {
-            console.log("in resolver");
-            return getPlants(userId);
         }
     },
     Mutation: {
@@ -92,9 +63,6 @@ export const resolvers = {
         },
         signInUser: (root, { login, password }, { secret }) => {
             return signInUser({ login, password }, { secret });
-        },
-        createPlant: (root, { name }, { userId }) => {
-            return createPlant({ name }, { userId });
         }
     }
 };
