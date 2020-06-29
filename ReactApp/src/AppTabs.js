@@ -4,18 +4,9 @@ import {Center} from '../components/Center';
 import {Text, Button} from 'react-native';
 import {AuthContext} from './AuthProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {HomeStack} from './HomeStack';
 
 const Tabs = createBottomTabNavigator();
-
-function Home() {
-    const {logout} = useContext(AuthContext);
-    return (
-        <Center>
-            <Text>Home</Text>
-            <Button title="logout" onPress={() => logout()} />
-        </Center>
-    );
-}
 
 export const AppTabs = () => {
     return (
@@ -40,7 +31,7 @@ export const AppTabs = () => {
                 activeTintColor: 'tomato',
                 inactiveTintColor: 'gray',
             }}>
-            <Tabs.Screen name="Home" component={Home} />
+            <Tabs.Screen name="Home" component={HomeStack} />
         </Tabs.Navigator>
     );
 };
