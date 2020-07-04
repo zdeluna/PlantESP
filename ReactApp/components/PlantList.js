@@ -1,0 +1,27 @@
+import React, {useEffect, useState} from 'react';
+import {GET_PLANTS} from '../graphql/queries/plant/getPlants';
+import {Center} from './Center';
+import Plant from '../components/Plant';
+import {useQuery} from '@apollo/react-hooks';
+import {FlatList} from 'react-native';
+
+const PlantList = ({navigation}) => {
+    const [plants, setPlants] = useState([]);
+    const {data, loading, error} = useQuery(GET_PLANTS);
+
+    useEffect(() => {
+        if (data && data.plants) setPlants(data.plants);
+    });
+
+    return (
+        <Center>
+            <FlatList
+                data={plants}
+                keyExtractor={item => item.id}
+                renderItem={({item}) => <Plant name={item.name} id={item.id} />}
+            />
+        </Center>
+    );
+};
+
+export default PlantList;
