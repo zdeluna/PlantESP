@@ -4,7 +4,5 @@ import { merge } from "lodash";
 
 let resolvers = {};
 
-console.log("in index: ");
 resolvers = merge(resolvers, plantResolvers, userResolvers);
-console.log(resolvers);
 export { resolvers };

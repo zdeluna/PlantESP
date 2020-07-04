@@ -1,5 +1,18 @@
 const connectToDatabase = require("../config/db");
 
+const getPlant = async ({ id }) => {
+    try {
+        const { Plant } = await connectToDatabase();
+        console.log("ID OF ");
+        console.log(id);
+        const plant = await Plant.findByPk(id);
+        console.log(plant);
+        return plant;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 const getPlants = async userId => {
     try {
         const { Plant } = await connectToDatabase();
@@ -8,8 +21,6 @@ const getPlants = async userId => {
                 userId: userId
             }
         });
-        console.log("Print plants");
-        console.log(plants);
         return plants;
     } catch (error) {}
 };
@@ -29,6 +40,9 @@ export default {
         plants: (root, args, { userId }) => {
             console.log("in resolver");
             return getPlants(userId);
+        },
+        plant: (root, { id }) => {
+            return getPlant({ id });
         }
     },
     Mutation: {
