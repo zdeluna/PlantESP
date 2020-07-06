@@ -5,7 +5,7 @@ import {Text, TouchableOpacity, Button, FlatList} from 'react-native';
 import {AuthContext} from './AuthProvider';
 import {ApolloClient} from 'apollo-client';
 import {useQuery} from '@apollo/react-hooks';
-import Plant from '../components/Plant';
+import PlantData from '../components/PlantData';
 import PlantList from '../components/PlantList';
 
 const Stack = createStackNavigator();
@@ -30,7 +30,7 @@ export const HomeStack = () => {
                 }}
                 component={PlantList}
             />
-            <Stack.Screen name="Plant" component={Plant} />
+            <Stack.Screen name="PlantData" component={PlantData} />
         </Stack.Navigator>
     );
 };

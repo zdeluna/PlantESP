@@ -2,10 +2,14 @@ import React, {useContext, useState, useEffect} from 'react';
 import {Center} from '../components/Center';
 import {Text, TouchableOpacity, Button, FlatList} from 'react-native';
 
-const Plant = ({id}) => {
+const Plant = ({plant}) => {
+    console.log('Now');
+    const [name, setName] = useState(plant.name);
+
+    console.log(plant);
     return (
         <Center>
-            <Text>Plant</Text>
+            <Text>{name}</Text>
         </Center>
     );
 };
