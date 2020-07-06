@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {GET_PLANTS} from '../graphql/queries/plant/getPlants';
-import {Center} from './Center';
-import Plant from '../components/Plant';
+import {GET_PLANTS} from '../../graphql/queries/plant/getPlants';
+import {Center} from '../../components/Center';
+import Plant from './Plant';
 import {useQuery} from '@apollo/react-hooks';
 import {FlatList} from 'react-native';
 import PlantData from './PlantData';

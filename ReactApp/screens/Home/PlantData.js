@@ -1,8 +1,8 @@
 import React, {useState, useEffect} from 'react';
-import {GET_PLANT} from '../graphql/queries/plant/getPlant';
+import {GET_PLANT} from '../../graphql/queries/plant/getPlant';
 import Plant from './Plant';
 import {useQuery} from '@apollo/react-hooks';
-import Loading from './Loading';
+import Loading from '../../components/Loading';
 
 const PlantData = ({navigation, route}) => {
     const [plant, setPlant] = useState();

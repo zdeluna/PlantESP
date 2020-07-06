@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect} from 'react';
-import {Center} from '../components/Center';
+import {Center} from '../../components/Center';
 import {Text, TouchableOpacity, Button, FlatList} from 'react-native';
 
 const Plant = ({plant}) => {

@@ -4,7 +4,7 @@ import {Center} from '../components/Center';
 import {Text, Button} from 'react-native';
 import {AuthContext} from './AuthProvider';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import {HomeStack} from './HomeStack';
+import {HomeStack} from '../screens/Home/HomeStack';
 
 const Tabs = createBottomTabNavigator();
 

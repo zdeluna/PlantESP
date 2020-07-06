@@ -1,22 +1,36 @@
-import React, {useContext} from 'react';
+import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
-import FormField from './FormField';
-import formData from './FormData';
+import FormField from '../../components/FormField';
+import formData from '../../components/FormData';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import {CREATE_USER} from '../../graphql/mutations/user/createUser';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
-import {AuthContext} from '../src/AuthProvider';
+import AsyncStorage from '@react-native-community/async-storage';
 
-const Login = ({navigation}) => {
+const SignUp = ({navigation}) => {
     const [formValues, handleFormValueChange, setFormValues] = formData({
-        login: '',
+        username: '',
+        email: '',
         password: '',
     });
 
-    const {login} = useContext(AuthContext);
+    const client = useApolloClient();
 
-    const handleLogInUser = () => {
-        login(formValues.login, formValues.password);
+    const [createUser] = useMutation(CREATE_USER, {
+        async onCompleted({createUser}) {
+            await AsyncStorage.setItem('token', createUser.token);
+        },
+    });
+
+    const handleCreateUser = () => {
+        createUser({
+            variables: {
+                username: formValues.username,
+                email: formValues.email,
+                password: formValues.password,
+            },
+        });
     };
 
     return (
@@ -28,14 +42,21 @@ const Login = ({navigation}) => {
                     fontWeight: '300',
                     paddingBottom: 30,
                 }}>
-                Log In
+                Sign Up
             </Text>
             <FormField
-                label="Username or Email"
-                formKey="login"
-                placeholder="Your username or email"
-                handleFormValueChange={handleFormValueChange}
+                label="Username"
+                formKey="username"
+                placeholder="Your username"
                 textInputProps={{autoCapitalize: 'none'}}
+                handleFormValueChange={handleFormValueChange}
+            />
+            <FormField
+                label="Email"
+                formKey="email"
+                placeholder="Your email"
+                textInputProps={{autoCapitalize: 'none'}}
+                handleFormValueChange={handleFormValueChange}
             />
             <FormField
                 label="Password"
@@ -46,14 +67,14 @@ const Login = ({navigation}) => {
             />
             <Button
                 style={styles.button}
-                onPress={handleLogInUser}
-                title="Log In"
+                onPress={handleCreateUser}
+                title="Sign Up"
             />
             <Button
                 style={styles.button}
-                title="Not registered?"
+                title="Already registered"
                 onPress={() => {
-                    navigation.navigate('SignUp');
+                    navigation.navigate('Login');
                 }}
             />
         </View>
@@ -80,4 +101,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Login;
+export default SignUp;

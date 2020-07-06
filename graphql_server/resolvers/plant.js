@@ -3,10 +3,7 @@ const connectToDatabase = require("../config/db");
 const getPlant = async ({ id }) => {
     try {
         const { Plant } = await connectToDatabase();
-        console.log("ID OF ");
-        console.log(id);
         const plant = await Plant.findByPk(id);
-        console.log(plant);
         return plant;
     } catch (error) {
         console.log(error);

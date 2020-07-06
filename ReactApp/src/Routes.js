@@ -5,7 +5,7 @@ import {Center} from '../components/Center';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AuthContext} from './AuthProvider';
 import {AppTabs} from './AppTabs';
-import {AuthStack} from './AuthStack';
+import {AuthStack} from '../screens/Auth/AuthStack';
 
 export const Routes = () => {
     const {user} = useContext(AuthContext);

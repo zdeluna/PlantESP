@@ -1,12 +1,12 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {createStackNavigator} from '@react-navigation/stack';
-import {Center} from '../components/Center';
+import {Center} from '../../components/Center';
 import {Text, TouchableOpacity, Button, FlatList} from 'react-native';
-import {AuthContext} from './AuthProvider';
+import {AuthContext} from '../../src/AuthProvider';
 import {ApolloClient} from 'apollo-client';
 import {useQuery} from '@apollo/react-hooks';
-import PlantData from '../components/PlantData';
-import PlantList from '../components/PlantList';
+import PlantData from './PlantData';
+import PlantList from './PlantList';
 
 const Stack = createStackNavigator();
 
