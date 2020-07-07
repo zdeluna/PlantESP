@@ -1,15 +1,32 @@
 import React, {useContext, useState, useEffect} from 'react';
 import {Center} from '../../components/Center';
-import {Text, TouchableOpacity, Button, FlatList} from 'react-native';
+import {Text, View, TouchableOpacity, Button, FlatList} from 'react-native';
+import Graph from './Graph';
 
 const Plant = ({plant}) => {
-    console.log('Now');
     const [name, setName] = useState(plant.name);
+    // Create some dummy temperature data
 
-    console.log(plant);
+    // Create some dummy humdity data
+
     return (
         <Center>
             <Text>{name}</Text>
+            <View>
+                <Button
+                    title="Temperature"
+                    onPress={() => {
+                        console.log('press');
+                    }}
+                />
+                <Graph />
+                <Button
+                    title="Humidty"
+                    onPress={() => {
+                        console.log('press');
+                    }}
+                />
+            </View>
         </Center>
     );
 };
