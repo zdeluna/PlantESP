@@ -45,6 +45,7 @@ type Mutation {
     createUser(email: String!, username: String!, password: String!): Token
     signInUser(login: String!, password: String!): Token!
     createPlant(name: String!): CreatePlantResponse
+    updatePlant(id: ID!, name: String, temperature: Int): Plant
 }
 
 schema {
