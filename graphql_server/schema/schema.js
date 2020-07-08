@@ -10,6 +10,7 @@ type Plant {
     id: ID!
     user: User!
     name: String!
+    temperatures: [Temperature]
 }
 
 type User {
@@ -22,6 +23,11 @@ type User {
 
 type Token {
     token: String!
+}
+
+type Temperature {
+    temperature: Int
+
 }
 
 type CreatePlantResponse {

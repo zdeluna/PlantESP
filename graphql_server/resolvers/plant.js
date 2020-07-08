@@ -10,6 +10,16 @@ const getPlant = async ({ id }) => {
     }
 };
 
+const updatePlant = async updatedFields => {
+    try {
+        const { Plant } = await connectToDatabase();
+        const plant = await Plant.findByPk(updatedFields.id);
+        return await plant.update(updatedFields);
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 const getPlants = async userId => {
     try {
         const { Plant } = await connectToDatabase();
@@ -45,6 +55,9 @@ export default {
     Mutation: {
         createPlant: (root, { name }, { userId }) => {
             return createPlant({ name }, { userId });
+        },
+        updatePlant: (root, updatedFields) => {
+            return updatePlant(updatedFields);
         }
     }
 };

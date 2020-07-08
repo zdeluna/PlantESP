@@ -8,6 +8,9 @@ module.exports = (sequelize, type) => {
         name: {
             type: type.STRING,
             allowNull: false
+        },
+        temperature: {
+            type: type.DATE
         }
     });
 
