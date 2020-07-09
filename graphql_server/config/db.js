@@ -18,8 +18,9 @@ const sequelize = new Sequelize(
 const connection = {};
 const User = UserModel(sequelize, Sequelize);
 const Plant = PlantModel(sequelize, Sequelize);
+const Temperature = PlantModel(sequelize, Sequelize);
 
-const Models = { User: User, Plant: Plant };
+const Models = { User, Plant, Temperature };
 
 Object.keys(Models).forEach(key => {
     if ("associate" in Models[key]) {

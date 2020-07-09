@@ -29,7 +29,13 @@ const schema = gql`
     }
 
     type Temperature {
-        temperature: DateTime
+        datetime: DateTime
+        degrees: Int
+    }
+
+    input TemperatureInput {
+        datetime: DateTime
+        degrees: Int
     }
 
     type CreatePlantResponse {
@@ -47,7 +53,11 @@ const schema = gql`
         createUser(email: String!, username: String!, password: String!): Token
         signInUser(login: String!, password: String!): Token!
         createPlant(name: String!): CreatePlantResponse
-        updatePlant(id: ID!, name: String, temperature: Int): Plant
+        updatePlant(
+            id: ID!
+            name: String
+            temperatures: [TemperatureInput]
+        ): Plant
     }
 
     schema {

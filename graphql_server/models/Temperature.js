@@ -1,23 +1,22 @@
 module.exports = (sequelize, type) => {
-    const Plant = sequelize.define("plant", {
+    const Temperature = sequelize.define("Temperature", {
         id: {
             type: type.INTEGER,
             primaryKey: true,
             autoIncrement: true
         },
-        name: {
-            type: type.STRING,
+        degrees: {
+            type: type.INTEGER,
             allowNull: false
         },
-        temperatures: {
+        datetime: {
             type: type.DATE
         }
     });
 
-    Plant.associate = models => {
-        Plant.belongsTo(models.User);
-        Plant.hasMany(models.Temperature);
+    Temperature.associate = models => {
+        Temperature.belongsTo(models.Plant);
     };
 
-    return Plant;
+    return Temperature;
 };

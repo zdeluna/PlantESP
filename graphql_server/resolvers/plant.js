@@ -12,8 +12,19 @@ const getPlant = async ({ id }) => {
 
 const updatePlant = async updatedFields => {
     try {
-        const { Plant } = await connectToDatabase();
+        const { Plant, Temperature } = await connectToDatabase();
         const plant = await Plant.findByPk(updatedFields.id);
+
+        /* Add a temperature reading to temperatures field */
+        if (updatedFields.temperatures) {
+            let tempReading = updatedFields.temperatures;
+
+            await Temperature.create({
+                degrees: tempReading.degrees,
+                datetime: tempReading.datetime
+            });
+        }
+
         return await plant.update(updatedFields);
     } catch (error) {
         console.log(error);
