@@ -1,56 +1,59 @@
-const schema = `
+import { gql } from "apollo-server";
 
-type CreateUserResponse {
-    user: User
-    success: Boolean!
-    message: String
-}
+const schema = gql`
+    scalar DateTime
 
-type Plant {
-    id: ID!
-    user: User!
-    name: String!
-    temperatures: [Temperature]
-}
+    type CreateUserResponse {
+        user: User
+        success: Boolean!
+        message: String
+    }
 
-type User {
-    id: ID!
-    username: String!
-    password: String!
-    email: String!
-    plants: [Plant]
-}
+    type Plant {
+        id: ID!
+        user: User!
+        name: String!
+        temperatures: [Temperature]
+    }
 
-type Token {
-    token: String!
-}
+    type User {
+        id: ID!
+        username: String!
+        password: String!
+        email: String!
+        plants: [Plant]
+    }
 
-type Temperature {
-    temperature: Int
+    type Token {
+        token: String!
+    }
 
-}
+    type Temperature {
+        temperature: DateTime
+    }
 
-type CreatePlantResponse {
-    success: Boolean!
-    id: ID!
-}
+    type CreatePlantResponse {
+        success: Boolean!
+        id: ID!
+    }
 
-type Query {
-    users(id: String!): User!
-    plants:[Plant]
-    plant(id: ID!): Plant!
-}
+    type Query {
+        users(id: String!): User!
+        plants: [Plant]
+        plant(id: ID!): Plant!
+    }
 
-type Mutation {
-    createUser(email: String!, username: String!, password: String!): Token
-    signInUser(login: String!, password: String!): Token!
-    createPlant(name: String!): CreatePlantResponse
-    updatePlant(id: ID!, name: String, temperature: Int): Plant
-}
+    type Mutation {
+        createUser(email: String!, username: String!, password: String!): Token
+        signInUser(login: String!, password: String!): Token!
+        createPlant(name: String!): CreatePlantResponse
+        updatePlant(id: ID!, name: String, temperature: Int): Plant
+    }
 
-schema {
-    query: Query,
-    mutation: Mutation
-}`;
+    schema {
+        query: Query
+        mutation: Mutation
+    }
+`;
 
 export { schema };
