@@ -7,7 +7,7 @@ module.exports = (sequelize, type) => {
         },
         name: {
             type: type.STRING,
-            allowNull: false
+            allowNull: true
         },
         temperatures: {
             type: type.DATE

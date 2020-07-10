@@ -43,6 +43,10 @@ const schema = gql`
         id: ID!
     }
 
+    type CreateTemperatureReadingResponse {
+        success: Boolean!
+    }
+
     type Query {
         users(id: String!): User!
         plants: [Plant]
@@ -53,11 +57,12 @@ const schema = gql`
         createUser(email: String!, username: String!, password: String!): Token
         signInUser(login: String!, password: String!): Token!
         createPlant(name: String!): CreatePlantResponse
-        updatePlant(
-            id: ID!
-            name: String
-            temperatures: [TemperatureInput]
-        ): Plant
+        updatePlant(id: ID!, name: String): Plant
+        createTemperatureReading(
+            plantId: ID!
+            degrees: Int!
+            datetime: DateTime!
+        ): CreateTemperatureReadingResponse
     }
 
     schema {

@@ -1,9 +1,32 @@
 const connectToDatabase = require("../config/db");
 
+const createTemperatureReading = async ({ plantId, datetime, degrees }) => {
+    try {
+        const { Temperature } = await connectToDatabase();
+        const temperatureReading = await Temperature.create({
+            plantId,
+            datetime,
+            degrees
+        });
+        return { success: true };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 const getPlant = async ({ id }) => {
     try {
-        const { Plant } = await connectToDatabase();
+        const { Plant, Temperature } = await connectToDatabase();
         const plant = await Plant.findByPk(id);
+
+        const temperatures = await Temperature.findAll({
+            where: {
+                plantId: id
+            }
+        });
+
+        plant.temperatures = temperatures;
+
         return plant;
     } catch (error) {
         console.log(error);
@@ -12,20 +35,10 @@ const getPlant = async ({ id }) => {
 
 const updatePlant = async updatedFields => {
     try {
-        const { Plant, Temperature } = await connectToDatabase();
+        const { Plant } = await connectToDatabase();
         const plant = await Plant.findByPk(updatedFields.id);
 
-        /* Add a temperature reading to temperatures field */
-        if (updatedFields.temperatures) {
-            let tempReading = updatedFields.temperatures;
-
-            await Temperature.create({
-                degrees: tempReading.degrees,
-                datetime: tempReading.datetime
-            });
-        }
-
-        return await plant.update(updatedFields);
+        await plant.update(updatedFields);
     } catch (error) {
         console.log(error);
     }
@@ -69,6 +82,9 @@ export default {
         },
         updatePlant: (root, updatedFields) => {
             return updatePlant(updatedFields);
+        },
+        createTemperatureReading: (root, { plantId, datetime, degrees }) => {
+            return createTemperatureReading({ plantId, datetime, degrees });
         }
     }
 };

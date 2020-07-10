@@ -2,6 +2,7 @@ const Sequelize = require("sequelize");
 const mysql2 = require("mysql2");
 const UserModel = require("../models/User");
 const PlantModel = require("../models/Plant");
+const TemperatureModel = require("../models/Temperature");
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -18,7 +19,7 @@ const sequelize = new Sequelize(
 const connection = {};
 const User = UserModel(sequelize, Sequelize);
 const Plant = PlantModel(sequelize, Sequelize);
-const Temperature = PlantModel(sequelize, Sequelize);
+const Temperature = TemperatureModel(sequelize, Sequelize);
 
 const Models = { User, Plant, Temperature };
 
