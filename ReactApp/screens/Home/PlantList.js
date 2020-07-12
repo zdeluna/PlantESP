@@ -12,7 +12,7 @@ const PlantItem = ({navigation, id, name}) => {
         <Button
             title={name}
             onPress={() => {
-                navigation.navigate('PlantData', {id: id});
+                navigation.navigate('PlantData', {id: 3});
             }}
         />
     );

@@ -1,12 +1,26 @@
 const connectToDatabase = require("../config/db");
 
-const createTemperatureReading = async ({ plantId, datetime, degrees }) => {
+const createHumidityReading = async ({ plantId, datetime, value }) => {
+    try {
+        const { Humidity } = await connectToDatabase();
+        const humidityReading = await Humidity.create({
+            plantId,
+            datetime,
+            value
+        });
+        return { success: true };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const createTemperatureReading = async ({ plantId, datetime, value }) => {
     try {
         const { Temperature } = await connectToDatabase();
         const temperatureReading = await Temperature.create({
             plantId,
             datetime,
-            degrees
+            value
         });
         return { success: true };
     } catch (error) {
@@ -25,7 +39,14 @@ const getPlant = async ({ id }) => {
             }
         });
 
+        const humidities = await Humidity.findAll({
+            where: {
+                plantId: id
+            }
+        });
+
         plant.temperatures = temperatures;
+        plant.humidities = humidities;
 
         return plant;
     } catch (error) {
@@ -83,8 +104,11 @@ export default {
         updatePlant: (root, updatedFields) => {
             return updatePlant(updatedFields);
         },
-        createTemperatureReading: (root, { plantId, datetime, degrees }) => {
-            return createTemperatureReading({ plantId, datetime, degrees });
+        createTemperatureReading: (root, { plantId, datetime, value }) => {
+            return createTemperatureReading({ plantId, datetime, value });
+        },
+        createHumidityReading: (root, { plantId, datetime, value }) => {
+            return createHumidityReading({ plantId, datetime, value });
         }
     }
 };

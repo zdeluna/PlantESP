@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {Center} from '../../components/Center';
 import {Dimensions, Text, View} from 'react-native';
 import {
@@ -10,42 +10,27 @@ import {
     StackedBarChart,
 } from 'react-native-chart-kit';
 
-const Graph = () => {
+const Graph = ({xAxis, yAxis}) => {
     return (
         <View>
             <LineChart
                 data={{
-                    labels: [
-                        'Mon',
-                        'Tues',
-                        'Wed',
-                        'Thurs',
-                        'Fri',
-                        'Sat',
-                        'Sun',
-                    ],
+                    labels: xAxis,
                     datasets: [
                         {
-                            data: [
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                                Math.random() * 100,
-                            ],
+                            data: yAxis,
                         },
                     ],
                 }}
                 width={Dimensions.get('window').width} // from react-native
                 height={220}
-                yAxisLabel="$"
-                yAxisSuffix="k"
+                yAxisLabel=""
+                yAxisSuffix="°F"
                 yAxisInterval={1} // optional, defaults to 1
                 chartConfig={{
                     backgroundColor: '#d3d3d3',
-                    backgroundGradientFrom: '#333333',
-                    backgroundGradientTo: '#333333',
+                    backgroundGradientFrom: '#0B2B36',
+                    backgroundGradientTo: '#0B2B36',
                     decimalPlaces: 2, // optional, defaults to 2dp
                     color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
                     labelColor: (opacity = 1) =>

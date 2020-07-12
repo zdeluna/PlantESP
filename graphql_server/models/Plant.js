@@ -8,15 +8,13 @@ module.exports = (sequelize, type) => {
         name: {
             type: type.STRING,
             allowNull: true
-        },
-        temperatures: {
-            type: type.DATE
         }
     });
 
     Plant.associate = models => {
         Plant.belongsTo(models.User);
         Plant.hasMany(models.Temperature);
+        Plant.hasMany(models.Humidity);
     };
 
     return Plant;

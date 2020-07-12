@@ -1,5 +1,5 @@
 module.exports = (sequelize, type) => {
-    const Temperature = sequelize.define("temperature", {
+    const Humidity = sequelize.define("humidity", {
         id: {
             type: type.INTEGER,
             primaryKey: true,
@@ -14,9 +14,9 @@ module.exports = (sequelize, type) => {
         }
     });
 
-    Temperature.associate = models => {
-        Temperature.belongsTo(models.Plant);
+    Humidity.associate = models => {
+        Humidity.belongsTo(models.Plant);
     };
 
-    return Temperature;
+    return Humidity;
 };

@@ -3,6 +3,7 @@ const mysql2 = require("mysql2");
 const UserModel = require("../models/User");
 const PlantModel = require("../models/Plant");
 const TemperatureModel = require("../models/Temperature");
+const HumidityModel = require("../models/Humidity");
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -19,9 +20,10 @@ const sequelize = new Sequelize(
 const connection = {};
 const User = UserModel(sequelize, Sequelize);
 const Plant = PlantModel(sequelize, Sequelize);
+const Humidity = HumidityModel(sequelize, Sequelize);
 const Temperature = TemperatureModel(sequelize, Sequelize);
 
-const Models = { User, Plant, Temperature };
+const Models = { User, Plant, Temperature, Humidity };
 
 Object.keys(Models).forEach(key => {
     if ("associate" in Models[key]) {

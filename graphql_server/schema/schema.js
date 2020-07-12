@@ -30,12 +30,12 @@ const schema = gql`
 
     type Temperature {
         datetime: DateTime
-        degrees: Int
+        value: Int
     }
 
-    input TemperatureInput {
+    type Humidity {
         datetime: DateTime
-        degrees: Int
+        value: Int
     }
 
     type CreatePlantResponse {
@@ -43,7 +43,7 @@ const schema = gql`
         id: ID!
     }
 
-    type CreateTemperatureReadingResponse {
+    type CreateReadingResponse {
         success: Boolean!
     }
 
@@ -60,9 +60,14 @@ const schema = gql`
         updatePlant(id: ID!, name: String): Plant
         createTemperatureReading(
             plantId: ID!
-            degrees: Int!
+            value: Int!
             datetime: DateTime!
-        ): CreateTemperatureReadingResponse
+        ): CreateReadingResponse
+        createHumidityReading(
+            plantId: ID!
+            value: Int!
+            datetime: DateTime!
+        ): CreateReadingResponse
     }
 
     schema {

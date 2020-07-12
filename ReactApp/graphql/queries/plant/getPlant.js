@@ -5,6 +5,9 @@ export const GET_PLANT = gql`
         plant(id: $id) {
             name
             id
+            temperatures {
+              degrees
+              datetime
         }
     }
 `;
