@@ -30,7 +30,7 @@ const createTemperatureReading = async ({ plantId, datetime, value }) => {
 
 const getPlant = async ({ id }) => {
     try {
-        const { Plant, Temperature } = await connectToDatabase();
+        const { Plant, Temperature, Humidity } = await connectToDatabase();
         const plant = await Plant.findByPk(id);
 
         const temperatures = await Temperature.findAll({

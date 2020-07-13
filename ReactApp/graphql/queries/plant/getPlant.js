@@ -6,8 +6,13 @@ export const GET_PLANT = gql`
             name
             id
             temperatures {
-              degrees
-              datetime
+                value
+                datetime
+            }
+            humidities {
+                value
+                datetime
+            }
         }
     }
 `;

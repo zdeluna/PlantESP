@@ -14,6 +14,7 @@ const schema = gql`
         user: User!
         name: String!
         temperatures: [Temperature]
+        humidities: [Humidity]
     }
 
     type User {
