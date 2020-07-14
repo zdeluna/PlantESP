@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Center} from '../../components/Center';
-import {Text, View, TouchableOpacity, Button} from 'react-native';
+import {Text, View, TouchableOpacity, Button, StyleSheet} from 'react-native';
 import Graph from './Graph';
 import moment from 'moment';
 
@@ -23,8 +23,9 @@ const GraphData = props => {
 
     return (
         <Center>
-            <View>
+            <View style={styles.buttonPanel}>
                 <Button
+                    style={styles.DataCategoryButton}
                     title="Temperature"
                     onPress={() => {
                         setXAxisData(temperatureData.xValues);
@@ -32,6 +33,7 @@ const GraphData = props => {
                     }}
                 />
                 <Button
+                    style={styles.DataCategoryButton}
                     title="Humidity"
                     onPress={() => {
                         setXAxisData(humidityData.xValues);
@@ -44,11 +46,23 @@ const GraphData = props => {
                         console.log('press');
                     }}
                 />
-
+            </View>
+            <View>
                 <Graph xAxis={xAxisData} yAxis={yAxisData} />
             </View>
         </Center>
     );
 };
+
+const styles = StyleSheet.create({
+    buttonPanel: {
+        display: 'flex',
+        flexDirection: 'row',
+    },
+    DataCategoryButton: {
+        color: '#841584',
+        fontSize: 30,
+    },
+});
 
 export default GraphData;

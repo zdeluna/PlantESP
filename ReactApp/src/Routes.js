@@ -1,5 +1,5 @@
 import React, {useState, useContext, useEffect} from 'react';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, DefaultTheme} from '@react-navigation/native';
 import {View, Text, ActivityIndicator} from 'react-native';
 import {Center} from '../components/Center';
 import AsyncStorage from '@react-native-community/async-storage';
@@ -10,6 +10,15 @@ import {AuthStack} from '../screens/Auth/AuthStack';
 export const Routes = () => {
     const {user} = useContext(AuthContext);
     const [loading, setLoading] = useState(true);
+
+    const MyTheme = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: '#0B2B36',
+            text: '#FFFFFF',
+        },
+    };
 
     useEffect(() => {
         try {
@@ -35,7 +44,7 @@ export const Routes = () => {
     }
 
     return (
-        <NavigationContainer>
+        <NavigationContainer theme={MyTheme}>
             {user ? <AppTabs /> : <AuthStack />}
         </NavigationContainer>
     );
