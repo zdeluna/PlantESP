@@ -18,34 +18,63 @@ const GraphData = props => {
     const temperatureData = filterData(props.temperatures);
     const humidityData = filterData(props.humidities);
 
+    const [categorySelected, setCategorySelected] = useState('Temperature');
+
     const [xAxisData, setXAxisData] = useState(temperatureData.xValues);
     const [yAxisData, setYAxisData] = useState(temperatureData.yValues);
 
     return (
         <Center>
             <View style={styles.buttonPanel}>
-                <Button
-                    style={styles.DataCategoryButton}
-                    title="Temperature"
+                <TouchableOpacity
+                    style={styles.categoryButton}
                     onPress={() => {
                         setXAxisData(temperatureData.xValues);
                         setYAxisData(temperatureData.yValues);
-                    }}
-                />
-                <Button
-                    style={styles.DataCategoryButton}
-                    title="Humidity"
+                        setCategorySelected('Temperature');
+                    }}>
+                    <Text
+                        style={
+                            categorySelected == 'Temperature'
+                                ? styles.categoryTextSelected
+                                : styles.categoryTextUnSelected
+                        }>
+                        Temperature
+                    </Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                    style={styles.categoryButton}
                     onPress={() => {
                         setXAxisData(humidityData.xValues);
                         setYAxisData(humidityData.yValues);
-                    }}
-                />
-                <Button
-                    title="Soil"
+                        setCategorySelected('Humidity');
+                    }}>
+                    <Text
+                        style={
+                            categorySelected == 'Humidity'
+                                ? styles.categoryTextSelected
+                                : styles.categoryTextUnSelected
+                        }>
+                        Humidity
+                    </Text>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={styles.categoryButton}
                     onPress={() => {
-                        console.log('press');
-                    }}
-                />
+                        setXAxisData(humidityData.xValues);
+                        setYAxisData(humidityData.yValues);
+                        setCategorySelected('Humidity');
+                    }}>
+                    <Text
+                        style={
+                            categorySelected == 'Soil'
+                                ? styles.categoryTextSelected
+                                : styles.categoryTextUnSelected
+                        }>
+                        Soil
+                    </Text>
+                </TouchableOpacity>
             </View>
             <View>
                 <Graph xAxis={xAxisData} yAxis={yAxisData} />
@@ -59,9 +88,19 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
     },
-    DataCategoryButton: {
-        color: '#841584',
-        fontSize: 30,
+    categoryTextUnSelected: {
+        fontSize: 18,
+        textAlign: 'center',
+        color: '#FFFFFF',
+        textDecorationLine: 'none',
+        margin: 10,
+    },
+    categoryTextSelected: {
+        fontSize: 18,
+        textAlign: 'center',
+        color: '#FFFFFF',
+        textDecorationLine: 'underline',
+        margin: 10,
     },
 });
 
