@@ -12,6 +12,8 @@ Components to build circuit
 
 ESP32 microcontroller
 DHT 11 or DHT 22 Temperature Sensor
+Capacitive Soil Moisture Sensor
+Water Pump
 10k Ohm resistor
 Jumper wires
 Breadboard
