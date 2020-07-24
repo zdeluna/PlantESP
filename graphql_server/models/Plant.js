@@ -13,8 +13,7 @@ module.exports = (sequelize, type) => {
 
     Plant.associate = models => {
         Plant.belongsTo(models.User);
-        Plant.hasMany(models.Temperature);
-        Plant.hasMany(models.Humidity);
+        Plant.hasMany(models.SensorReading);
     };
 
     return Plant;

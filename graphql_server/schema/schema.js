@@ -13,8 +13,7 @@ const schema = gql`
         id: ID!
         user: User!
         name: String!
-        temperatures: [Temperature]
-        humidities: [Humidity]
+        sensor_readings: [SensorReading]
     }
 
     type User {
@@ -29,14 +28,11 @@ const schema = gql`
         token: String!
     }
 
-    type Temperature {
+    type SensorReading {
         datetime: DateTime
-        value: Int
-    }
-
-    type Humidity {
-        datetime: DateTime
-        value: Int
+        temperature: Int
+        humidity: Int
+        soil_moisture: Int
     }
 
     type CreatePlantResponse {
@@ -44,7 +40,7 @@ const schema = gql`
         id: ID!
     }
 
-    type CreateReadingResponse {
+    type CreateSensorReadingResponse {
         success: Boolean!
     }
 
@@ -59,16 +55,13 @@ const schema = gql`
         signInUser(login: String!, password: String!): Token!
         createPlant(name: String!): CreatePlantResponse
         updatePlant(id: ID!, name: String): Plant
-        createTemperatureReading(
+        createSensorReading(
             plantId: ID!
-            value: Int!
             datetime: DateTime!
-        ): CreateReadingResponse
-        createHumidityReading(
-            plantId: ID!
-            value: Int!
-            datetime: DateTime!
-        ): CreateReadingResponse
+            temperature: Int
+            humidity: Int
+            soil_moisture: Int
+        ): CreateSensorReadingResponse
     }
 
     schema {

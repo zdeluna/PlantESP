@@ -6,8 +6,8 @@
 #include<PubSubClient.h>
 #include<ArduinoJson.h>
 
-#define AWS_IOT_PUBLISH_TOPIC   "esp32/pub"
-#define AWS_IOT_SUBSCRIBE_TOPIC "esp32/sub"
+#define AWS_IOT_PUBLISH_TOPIC   "esp/pub"
+#define AWS_IOT_SUBSCRIBE_TOPIC "esp/sub"
 
 WiFiClientSecure net = WiFiClientSecure();
 MQTTClient client = MQTTClient(256);
@@ -111,14 +111,25 @@ void lwMQTTErr(lwmqtt_err_t reason)
 }
 
 void messageHandler(String &topic, String &payload){
+  Serial.println("Message received");
   Serial.println("incoming: " + topic + " - " + payload);
 }
 
 void publishMessage()
 {
-  data["time"].set(1000);
+  /*
+  data["time"].set("hello");
   serializeJson(doc, output);
-  client.publish(AWS_IOT_PUBLISH_TOPIC, output);
+  client.publish(AWS_IOT_PUBLISH_TOPIC, output);*/
+  StaticJsonDocument<200> doc;
+  doc["datetime"] = getLocalTimeNTP();
+  doc["temperature"] = 70;
+  doc["humidity"] = 60;
+  doc["soil"] = 20;
+  char jsonBuffer[512];
+  serializeJson(doc, jsonBuffer); // print to client
+  client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+  Serial.println("Publish message");
 }
 
 

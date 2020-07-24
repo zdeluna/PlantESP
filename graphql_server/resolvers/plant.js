@@ -1,20 +1,6 @@
 const connectToDatabase = require("../config/db");
 
-const createHumidityReading = async ({ plantId, datetime, value }) => {
-    try {
-        const { Humidity } = await connectToDatabase();
-        const humidityReading = await Humidity.create({
-            plantId,
-            datetime,
-            value
-        });
-        return { success: true };
-    } catch (error) {
-        console.log(error);
-    }
-};
-
-const createTemperatureReading = async ({ plantId, datetime, value }) => {
+const createSensorReading = async ({ plantId, datetime, value }) => {
     try {
         const { Temperature } = await connectToDatabase();
         const temperatureReading = await Temperature.create({
@@ -30,23 +16,16 @@ const createTemperatureReading = async ({ plantId, datetime, value }) => {
 
 const getPlant = async ({ id }) => {
     try {
-        const { Plant, Temperature, Humidity } = await connectToDatabase();
+        const { Plant, SensorReading } = await connectToDatabase();
         const plant = await Plant.findByPk(id);
 
-        const temperatures = await Temperature.findAll({
+        const sensorRadings = await SensorReading.findAll({
             where: {
                 plantId: id
             }
         });
 
-        const humidities = await Humidity.findAll({
-            where: {
-                plantId: id
-            }
-        });
-
-        plant.temperatures = temperatures;
-        plant.humidities = humidities;
+        plant.sensor_readings = sensorReadings;
 
         return plant;
     } catch (error) {
@@ -104,11 +83,17 @@ export default {
         updatePlant: (root, updatedFields) => {
             return updatePlant(updatedFields);
         },
-        createTemperatureReading: (root, { plantId, datetime, value }) => {
-            return createTemperatureReading({ plantId, datetime, value });
-        },
-        createHumidityReading: (root, { plantId, datetime, value }) => {
-            return createHumidityReading({ plantId, datetime, value });
+        createSensorReading: (
+            root,
+            { plantId, datetime, temperature, humidity, soil_moisture }
+        ) => {
+            return createSensorReading({
+                plantId,
+                datetime,
+                temperature,
+                humidity,
+                soil_moisture
+            });
         }
     }
 };

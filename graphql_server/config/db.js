@@ -2,8 +2,7 @@ const Sequelize = require("sequelize");
 const mysql2 = require("mysql2");
 const UserModel = require("../models/User");
 const PlantModel = require("../models/Plant");
-const TemperatureModel = require("../models/Temperature");
-const HumidityModel = require("../models/Humidity");
+const SensorReadingModel = require("../models/SensorReading");
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -20,10 +19,9 @@ const sequelize = new Sequelize(
 const connection = {};
 const User = UserModel(sequelize, Sequelize);
 const Plant = PlantModel(sequelize, Sequelize);
-const Humidity = HumidityModel(sequelize, Sequelize);
-const Temperature = TemperatureModel(sequelize, Sequelize);
+const SensorReading = SensorReadingModel(sequelize, Sequelize);
 
-const Models = { User, Plant, Temperature, Humidity };
+const Models = { User, Plant, SensorReading };
 
 Object.keys(Models).forEach(key => {
     if ("associate" in Models[key]) {
@@ -37,7 +35,7 @@ module.exports = async () => {
             console.log("Using connection");
             return Models;
         }
-        await sequelize.sync({ force: false });
+        await sequelize.sync({ force: true });
         await sequelize.authenticate();
         connection.isConnected = true;
         console.log("Created new connection");
