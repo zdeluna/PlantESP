@@ -26,10 +26,7 @@ const Plant = ({plant}) => {
             <Text style={{color: colors.text, fontSize: 30}}>
                 Last Watered:{' '}
             </Text>
-            <GraphData
-                temperatures={plant.temperatures}
-                humidities={plant.humidities}
-            />
+            <GraphData sensor_readings={plant.sensor_readings} />
             <Button style={styles.Button} title="Manual Water Now" />
             <Button style={styles.Button} title="Automatic Watering Settings" />
         </Center>

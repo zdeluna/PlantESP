@@ -5,13 +5,11 @@ export const GET_PLANT = gql`
         plant(id: $id) {
             name
             id
-            temperatures {
-                value
+            sensor_readings {
                 datetime
-            }
-            humidities {
-                value
-                datetime
+                temperature
+                humidity
+                soil_moisture
             }
         }
     }

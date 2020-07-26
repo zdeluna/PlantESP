@@ -6,22 +6,25 @@ import moment from 'moment';
 
 const GraphData = props => {
     const filterData = data => {
-        const filteredData = {};
-        filteredData.yValues = data.map(datum => datum.value);
+        const timeData = data.map(datum => datum.datetime);
+        const temperatureData = data.map(datum => datum.temperature);
+        const humidityData = data.map(datum => datum.humidity);
+        const soilMoistureData = data.map(datum => datum.soil_moisture);
 
-        filteredData.xValues = data.map(datum => {
-            return moment(datum.datetime).format('DD-MMM');
-        });
-
-        return filteredData;
+        return {timeData, temperatureData, humidityData, soilMoistureData};
     };
-    const temperatureData = filterData(props.temperatures);
-    const humidityData = filterData(props.humidities);
+
+    const {
+        timeData,
+        temperatureData,
+        humidityData,
+        soilMoistureData,
+    } = filterData(props.sensor_readings);
 
     const [categorySelected, setCategorySelected] = useState('Temperature');
 
-    const [xAxisData, setXAxisData] = useState(temperatureData.xValues);
-    const [yAxisData, setYAxisData] = useState(temperatureData.yValues);
+    const [xAxisData, setXAxisData] = useState(timeData);
+    const [yAxisData, setYAxisData] = useState(temperatureData);
 
     return (
         <Center>
@@ -29,8 +32,7 @@ const GraphData = props => {
                 <TouchableOpacity
                     style={styles.categoryButton}
                     onPress={() => {
-                        setXAxisData(temperatureData.xValues);
-                        setYAxisData(temperatureData.yValues);
+                        setYAxisData(temperatureData);
                         setCategorySelected('Temperature');
                     }}>
                     <Text
@@ -45,8 +47,7 @@ const GraphData = props => {
                 <TouchableOpacity
                     style={styles.categoryButton}
                     onPress={() => {
-                        setXAxisData(humidityData.xValues);
-                        setYAxisData(humidityData.yValues);
+                        setYAxisData(humidityData);
                         setCategorySelected('Humidity');
                     }}>
                     <Text
@@ -62,9 +63,8 @@ const GraphData = props => {
                 <TouchableOpacity
                     style={styles.categoryButton}
                     onPress={() => {
-                        setXAxisData(humidityData.xValues);
-                        setYAxisData(humidityData.yValues);
-                        setCategorySelected('Humidity');
+                        setYAxisData(soilMoistureData);
+                        setCategorySelected('Soil Mositure');
                     }}>
                     <Text
                         style={
