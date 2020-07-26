@@ -1,12 +1,22 @@
+"use strict";
+
 const connectToDatabase = require("../config/db");
 
-const createSensorReading = async ({ plantId, datetime, value }) => {
+const createSensorReading = async ({
+    plantId,
+    datetime,
+    temperature,
+    humidity,
+    soil_moisture
+}) => {
     try {
-        const { Temperature } = await connectToDatabase();
-        const temperatureReading = await Temperature.create({
+        const { SensorReading } = await connectToDatabase();
+        const sensorReading = await SensorReading.create({
             plantId,
             datetime,
-            value
+            temperature,
+            humidity,
+            soil_moisture
         });
         return { success: true };
     } catch (error) {
@@ -19,7 +29,7 @@ const getPlant = async ({ id }) => {
         const { Plant, SensorReading } = await connectToDatabase();
         const plant = await Plant.findByPk(id);
 
-        const sensorRadings = await SensorReading.findAll({
+        const sensorReadings = await SensorReading.findAll({
             where: {
                 plantId: id
             }
