@@ -10,7 +10,7 @@ import {
     StackedBarChart,
 } from 'react-native-chart-kit';
 
-const Graph = ({xAxis, yAxis}) => {
+const Graph = ({xAxis, yAxis, yAxisUnits}) => {
     return (
         <View>
             <LineChart
@@ -25,7 +25,7 @@ const Graph = ({xAxis, yAxis}) => {
                 width={Dimensions.get('window').width} // from react-native
                 height={220}
                 yAxisLabel=""
-                yAxisSuffix="°F"
+                yAxisSuffix={yAxisUnits}
                 yAxisInterval={1} // optional, defaults to 1
                 chartConfig={{
                     backgroundColor: '#d3d3d3',

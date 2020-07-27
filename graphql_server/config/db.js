@@ -35,7 +35,7 @@ module.exports = async () => {
             console.log("Using connection");
             return Models;
         }
-        await sequelize.sync({ force: true });
+        await sequelize.sync({ force: false });
         await sequelize.authenticate();
         connection.isConnected = true;
         console.log("Created new connection");

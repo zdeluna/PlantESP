@@ -6,7 +6,9 @@ import moment from 'moment';
 
 const GraphData = props => {
     const filterData = data => {
-        const timeData = data.map(datum => datum.datetime);
+        const timeData = data.map(datum => {
+            return moment(datum.datetime).format('DD-MMM');
+        });
         const temperatureData = data.map(datum => datum.temperature);
         const humidityData = data.map(datum => datum.humidity);
         const soilMoistureData = data.map(datum => datum.soil_moisture);
@@ -25,6 +27,7 @@ const GraphData = props => {
 
     const [xAxisData, setXAxisData] = useState(timeData);
     const [yAxisData, setYAxisData] = useState(temperatureData);
+    const [yAxisUnits, setYAxisUnits] = useState('°');
 
     return (
         <Center>
@@ -33,6 +36,7 @@ const GraphData = props => {
                     style={styles.categoryButton}
                     onPress={() => {
                         setYAxisData(temperatureData);
+                        setYAxisUnits('°');
                         setCategorySelected('Temperature');
                     }}>
                     <Text
@@ -48,6 +52,7 @@ const GraphData = props => {
                     style={styles.categoryButton}
                     onPress={() => {
                         setYAxisData(humidityData);
+                        setYAxisUnits('%');
                         setCategorySelected('Humidity');
                     }}>
                     <Text
@@ -64,7 +69,8 @@ const GraphData = props => {
                     style={styles.categoryButton}
                     onPress={() => {
                         setYAxisData(soilMoistureData);
-                        setCategorySelected('Soil Mositure');
+                        setYAxisUnits('%');
+                        setCategorySelected('Soil Moisture');
                     }}>
                     <Text
                         style={
@@ -77,7 +83,11 @@ const GraphData = props => {
                 </TouchableOpacity>
             </View>
             <View>
-                <Graph xAxis={xAxisData} yAxis={yAxisData} />
+                <Graph
+                    xAxis={xAxisData}
+                    yAxis={yAxisData}
+                    yAxisUnits={yAxisUnits}
+                />
             </View>
         </Center>
     );
