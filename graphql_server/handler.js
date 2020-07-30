@@ -54,12 +54,14 @@ const server = new ApolloServer({
     tracing: true
 });
 
-module.exports.graphqlHandler = server.createHandler({
-    cors: {
-        origin: "*",
-        credentials: true
-    }
-});
+module.exports.graphqlHandler = () => {
+    server.createHandler({
+        cors: {
+            origin: "*",
+            credentials: true
+        }
+    });
+};
 
 module.exports.hello = async event => {
     return {

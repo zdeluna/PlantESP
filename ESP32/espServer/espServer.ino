@@ -123,8 +123,8 @@ void publishMessage()
   client.publish(AWS_IOT_PUBLISH_TOPIC, output);*/
   StaticJsonDocument<200> doc;
   doc["datetime"] = getLocalTimeNTP();
-  doc["temperature"] = 70;
-  doc["humidity"] = 60;
+  doc["temperature"] = 100;
+  doc["humidity"] = 100;
   doc["soil"] = 20;
   char jsonBuffer[512];
   serializeJson(doc, jsonBuffer); // print to client

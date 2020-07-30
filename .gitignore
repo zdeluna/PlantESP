@@ -31,3 +31,4 @@ package-lock.json
 AWSCLIV2.pkg
 *.json
 ESP32/config.h
+*.zip
