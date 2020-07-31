@@ -55,12 +55,14 @@ exports.handler = async (event, context, callback) => {
             $temperature: Int
             $humidity: Int
             $soil_moisture: Int
+            $datetime: DateTime!
         ) {
             createSensorReading(
                 plantId: $plantId
                 temperature: $temperature
                 humidity: $humidity
                 soil_moisture: $soil_moisture
+                datetime: $datetime
             ) {
                 success
             }
@@ -80,8 +82,14 @@ exports.handler = async (event, context, callback) => {
         datetime: "2020-11-18T10:15:30Z"
     };
 
-    client
-        .mutate({ mutation: CREATE_SENSOR_READING, variables: data })
-        .then(result => console.log(result))
-        .catch(error => console.log(error));
+    try {
+        console.log("Make mutation request");
+        const response = await client.mutate({
+            mutation: CREATE_SENSOR_READING,
+            variables: data
+        });
+        console.log("RESPONSE is " + response);
+    } catch (error) {
+        console.log("ERROR: " + error);
+    }
 };
