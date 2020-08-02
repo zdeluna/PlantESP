@@ -5,6 +5,7 @@
 #include "config.h"
 #include<PubSubClient.h>
 #include<ArduinoJson.h>
+#include "time.h"
 
 #define AWS_IOT_PUBLISH_TOPIC   "esp/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp/sub"
@@ -19,7 +20,7 @@ MQTTClient client = MQTTClient(256);
 const char* ssid = WIFI_SSID;
 const char* password = WIFI_PASSWORD;
 
-
+const int PLANT_ID = 4;
 
 
 int TEMP_SENSOR_PIN = 14;
@@ -30,8 +31,7 @@ const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(3);
 DynamicJsonDocument doc(capacity);
 JsonObject data = doc.createNestedObject("data");
 
-float temp, humid = 0.0;
-char output[128];
+uint8_t  temp, humid = 0;
 
 
 /* Use NTP (Network Time Protocol) to get the date and time from the NTP Server*/
@@ -39,11 +39,12 @@ const char* ntp_server = "pool.ntp.org";
 const long gmtOffset_sec = -18000;    // Use an UTC time offset for EST
 const int daylightOffset_sec = 3600;  // Offset for observing daylight savings time
 
+
 void connectToAWS()
 {
-  WiFi.mode(WIFI_STA);
+  //WiFi.mode(WIFI_STA);
   WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
-
+  
   Serial.println("Connect to Wifi");
 
   while (WiFi.status() != WL_CONNECTED) {
@@ -115,26 +116,31 @@ void messageHandler(String &topic, String &payload){
   Serial.println("incoming: " + topic + " - " + payload);
 }
 
-void publishMessage()
+int publishSensorReadings(uint8_t temperature, uint8_t humidity, uint8_t soil_moisture)
 {
-  /*
-  data["time"].set("hello");
-  serializeJson(doc, output);
-  client.publish(AWS_IOT_PUBLISH_TOPIC, output);*/
   StaticJsonDocument<200> doc;
+
+  doc["plantId"] = PLANT_ID;
   doc["datetime"] = getLocalTimeNTP();
-  doc["temperature"] = 100;
-  doc["humidity"] = 100;
-  doc["soil"] = 20;
+  doc["temperature"] = temperature;
+  doc["humidity"] = humidity;
+  doc["soil_moisture"] = soil_moisture; 
+
   char jsonBuffer[512];
-  serializeJson(doc, jsonBuffer); // print to client
+  serializeJson(doc, jsonBuffer); 
   client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
   Serial.println("Publish message");
+
+  while(!client.publish(AWS_IOT_PUBLISH_TOPIC)){
+    Serial.println("Retrying publishing message. Message did not publish correctly.");
+  }
+  Serial.println("Message has been published successfully");
+
+  return 1;
 }
 
-
-
 unsigned long getLocalTimeNTP() {
+    configTime(gmtOffset_sec, daylightOffset_sec, ntp_server);
     time_t now;
     struct tm timeinfo;
     if(!getLocalTime(&timeinfo)) {
@@ -153,8 +159,10 @@ void setup() {
   	// Start Serial Communication
   	Serial.begin(115200);
     delay(1000);
-    connectToAWS(); 
-  
+    connectToAWS();
+    delay(1000); 
+    publishSensorReadings(84, 50, 30);
+ 
  }
 
 void getTemperature() {
@@ -164,7 +172,6 @@ void getTemperature() {
 
 
 void loop() {
-  publishMessage();
   client.loop();
   delay(1000);
   
