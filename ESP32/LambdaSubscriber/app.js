@@ -19,7 +19,7 @@ const https = require("https");
 const gql = require("graphql-tag");
 const { ApolloClient } = require("apollo-client");
 const { createHttpLink } = require("apollo-link-http");
-const { useMutation } = require("@apollo/react-hooks");
+const { useMutation, useQuery } = require("@apollo/react-hooks");
 const { InMemoryCache } = require("apollo-cache-inmemory");
 
 const fetch = require("node-fetch");
@@ -38,6 +38,14 @@ exports.handler = async (event, context, callback) => {
     console.log("Datetime: " + datetime);
 
     datetime = new Date(datetime * 1000).toISOString();
+
+    const newSensorReading = {
+        plantId,
+        temperature,
+        humidity,
+        soil_moisture,
+        datetime
+    };
 
     let GRAPHQL_URI =
         "https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql";
@@ -77,8 +85,34 @@ exports.handler = async (event, context, callback) => {
         }
     `;
 
+    const GET_PLANT = gql`
+        query getPlant($id: ID!) {
+            plant(id: $id) {
+                name
+                id
+                sensor_readings {
+                    datetime
+                    temperature
+                    humidity
+                    soil_moisture
+                }
+            }
+        }
+    `;
+
     try {
-        console.log("Make mutation request");
+        // Check to make sure sensor reading does already exist
+        const plant = await client.query({
+            query: GET_PLANT,
+            variables: { id: plantId }
+        });
+
+        if (plant && plant.sensor_readings)
+            checkForDuplicate({
+                sensorReadings: data.sensor_readings,
+                newSensorReading
+            });
+
         const response = await client.mutate({
             mutation: CREATE_SENSOR_READING,
             variables: {
@@ -93,4 +127,16 @@ exports.handler = async (event, context, callback) => {
     } catch (error) {
         console.log("ERROR: " + error);
     }
+};
+
+const checkForDuplicate = ({ sensorReadings, newSensorReading }) => {
+    return new Promise((resolve, reject) => {
+        for (let i = sensorReadings.length - 1; i > -1; i--) {
+            if (sensorReadings[i].datetime === newSensorReading.datetime) {
+                console.log("duplicate found");
+                reject();
+            }
+        }
+        resolve();
+    });
 };
