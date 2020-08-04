@@ -29,78 +29,80 @@ var table = process.env.TABLE_NAME;
 var lambda = new AWS.Lambda();
 
 exports.handler = async (event, context, callback) => {
-    console.log(event);
-    let { plantId, temperature, humidity, soil_moisture, datetime } = event;
-    console.log("Plant Id: " + plantId);
-    console.log("Temperature: " + temperature);
-    console.log("Humidity: " + humidity);
-    console.log("Soil Moisture: " + soil_moisture);
-    console.log("Datetime: " + datetime);
+    try {
+        await validateSensorReadings(event);
+        let { plantId, temperature, humidity, soil_moisture, datetime } = event;
+        console.log("Plant Id: " + plantId);
+        console.log("Temperature: " + temperature);
+        console.log("Humidity: " + humidity);
+        console.log("Soil Moisture: " + soil_moisture);
+        console.log("Datetime: " + datetime);
 
-    datetime = new Date(datetime * 1000).toISOString();
+        if (datetime) datetime = new Date(datetime * 1000).toISOString();
 
-    const newSensorReading = {
-        plantId,
-        temperature,
-        humidity,
-        soil_moisture,
-        datetime
-    };
+        const newSensorReading = {
+            plantId,
+            temperature,
+            humidity,
+            soil_moisture,
+            datetime
+        };
 
-    let GRAPHQL_URI =
-        "https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql";
+        let GRAPHQL_URI =
+            "https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql";
 
-    const httpLink = createHttpLink({
-        uri: GRAPHQL_URI,
-        headers: {
-            "client-name": "Plant ESP [React App]",
-            "client-version": "1.0.0"
-        },
-        fetch: fetch
-    });
-    const cache = new InMemoryCache({ dataIdFromObject: object => object.id });
+        const httpLink = createHttpLink({
+            uri: GRAPHQL_URI,
+            headers: {
+                "client-name": "Plant ESP [React App]",
+                "client-version": "1.0.0"
+            },
+            fetch: fetch
+        });
+        const cache = new InMemoryCache({
+            dataIdFromObject: object => object.id
+        });
 
-    const client = new ApolloClient({
-        link: httpLink,
-        cache: cache
-    });
+        const client = new ApolloClient({
+            link: httpLink,
+            cache: cache
+        });
 
-    const CREATE_SENSOR_READING = gql`
-        mutation createSensorReading(
-            $plantId: ID!
-            $temperature: Int
-            $humidity: Int
-            $soil_moisture: Int
-            $datetime: DateTime!
-        ) {
-            createSensorReading(
-                plantId: $plantId
-                temperature: $temperature
-                humidity: $humidity
-                soil_moisture: $soil_moisture
-                datetime: $datetime
+        const CREATE_SENSOR_READING = gql`
+            mutation createSensorReading(
+                $plantId: ID!
+                $temperature: Int
+                $humidity: Int
+                $soil_moisture: Int
+                $datetime: DateTime!
             ) {
-                success
-            }
-        }
-    `;
-
-    const GET_PLANT = gql`
-        query getPlant($id: ID!) {
-            plant(id: $id) {
-                name
-                id
-                sensor_readings {
-                    datetime
-                    temperature
-                    humidity
-                    soil_moisture
+                createSensorReading(
+                    plantId: $plantId
+                    temperature: $temperature
+                    humidity: $humidity
+                    soil_moisture: $soil_moisture
+                    datetime: $datetime
+                ) {
+                    success
                 }
             }
-        }
-    `;
+        `;
 
-    try {
+        const GET_PLANT = gql`
+            query getPlant($id: ID!) {
+                plant(id: $id) {
+                    name
+                    id
+                    sensor_readings {
+                        datetime
+                        temperature
+                        humidity
+                        soil_moisture
+                    }
+                }
+            }
+        `;
+
         // Check to make sure sensor reading does already exist
         const plant = await client.query({
             query: GET_PLANT,
@@ -125,7 +127,7 @@ exports.handler = async (event, context, callback) => {
         });
         console.log("RESPONSE is " + response);
     } catch (error) {
-        console.log("ERROR: " + error);
+        console.log("ERROR found: " + error);
     }
 };
 
@@ -137,6 +139,20 @@ const checkForDuplicate = ({ sensorReadings, newSensorReading }) => {
                 reject();
             }
         }
+        resolve();
+    });
+};
+
+const validateSensorReadings = ({
+    plantId,
+    temperature,
+    humidity,
+    soil_moisture,
+    datetime
+}) => {
+    return new Promise((resolve, reject) => {
+        if (!(plantId && temperature && humidity && soil_moisture && datetime))
+            reject();
         resolve();
     });
 };
