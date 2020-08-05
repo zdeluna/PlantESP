@@ -17,9 +17,10 @@ const sequelize = new Sequelize(
 );
 
 const connection = {};
-const SensorReading = SensorReadingModel(sequelize, Sequelize);
-const Plant = PlantModel(sequelize, Sequelize);
+
 const User = UserModel(sequelize, Sequelize);
+const Plant = PlantModel(sequelize, Sequelize);
+const SensorReading = SensorReadingModel(sequelize, Sequelize);
 
 const Models = { User, Plant, SensorReading };
 

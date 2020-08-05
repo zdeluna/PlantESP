@@ -1,6 +1,7 @@
 "use strict";
 
 const connectToDatabase = require("../config/db");
+const fetch = require("node-fetch");
 
 const createSensorReading = async ({
     plantId,
@@ -18,6 +19,22 @@ const createSensorReading = async ({
             humidity,
             soil_moisture
         });
+        return { success: true };
+    } catch (error) {
+        console.log(error);
+    }
+};
+
+const waterPlant = async ({ id }) => {
+    try {
+        const response = await fetch(AWS_IOT_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ id })
+        });
+
         return { success: true };
     } catch (error) {
         console.log(error);
@@ -104,6 +121,9 @@ export default {
                 humidity,
                 soil_moisture
             });
+        },
+        waterPlant: (root, { id }) => {
+            return waterPlant({ id });
         }
     }
 };

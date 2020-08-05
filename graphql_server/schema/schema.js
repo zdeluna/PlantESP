@@ -44,6 +44,10 @@ const schema = gql`
         success: Boolean!
     }
 
+    type WaterPlantResponse {
+        success: Boolean!
+    }
+
     type Query {
         users(id: String!): User!
         plants: [Plant]
@@ -53,6 +57,7 @@ const schema = gql`
     type Mutation {
         createUser(email: String!, username: String!, password: String!): Token
         signInUser(login: String!, password: String!): Token!
+        waterPlant(id: ID!): WaterPlantResponse
         createPlant(name: String!): CreatePlantResponse
         updatePlant(id: ID!, name: String): Plant
         createSensorReading(

@@ -39,6 +39,7 @@ provider:
         DB_HOST: ${self:custom.secrets.DB_HOST}
         DB_PORT: ${self:custom.secrets.DB_PORT}
         SECRET: ${self:custom.secrets.SECRET}
+        AWS_IOT_ENDPOINT: ${self:custom.secrets.AWS_IOT_ENDPOINT}
     vpc:
         securityGroupIds:
             - ${self:custom.secrets.SECURITY_GROUP_ID}
