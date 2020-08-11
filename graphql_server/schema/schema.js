@@ -14,6 +14,7 @@ const schema = gql`
         user: User!
         name: String!
         sensor_readings: [SensorReading]
+        water_datetimes: [DateTime]
     }
 
     type User {

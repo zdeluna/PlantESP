@@ -3,6 +3,7 @@ const mysql2 = require("mysql2");
 const UserModel = require("../models/User");
 const PlantModel = require("../models/Plant");
 const SensorReadingModel = require("../models/SensorReading");
+const WaterDateTimeModel = require("../models/WaterDateTime");
 
 const sequelize = new Sequelize(
     process.env.DB_NAME,
@@ -21,8 +22,9 @@ const connection = {};
 const User = UserModel(sequelize, Sequelize);
 const Plant = PlantModel(sequelize, Sequelize);
 const SensorReading = SensorReadingModel(sequelize, Sequelize);
+const WaterDateTime = WaterDateTimeModel(sequelize, Sequelize);
 
-const Models = { User, Plant, SensorReading };
+const Models = { User, Plant, SensorReading, WaterDateTime };
 
 Object.keys(Models).forEach(key => {
     if ("associate" in Models[key]) {
