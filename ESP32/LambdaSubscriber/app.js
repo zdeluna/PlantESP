@@ -126,6 +126,7 @@ exports.handler = async (event, context, callback) => {
             }
         });
         console.log("RESPONSE is " + response);
+        return { response };
     } catch (error) {
         console.log("ERROR found: " + error);
     }

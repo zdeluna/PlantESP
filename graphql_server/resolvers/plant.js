@@ -1,7 +1,21 @@
 "use strict";
 
 const connectToDatabase = require("../config/db");
+const axios = require("axios");
+const rax = require("retry-axios");
+const https = require("https");
+var aws = require("aws-sdk");
+var lambda = new aws.Lambda({
+    region: "us-east-2"
+});
 const fetch = require("node-fetch");
+
+var params = {
+    FunctionName: "serverlessrepo-lambda-iot-rule-TopicPublisher-ERV04QH9NJA5",
+    InvocationType: "RequestResponse",
+    LogType: "Trail",
+    Payload: JSON.stringify({ text: "test" })
+};
 
 const createSensorReading = async ({
     plantId,
@@ -27,14 +41,14 @@ const createSensorReading = async ({
 
 const waterPlant = async ({ id }) => {
     try {
-        const response = await fetch(AWS_IOT_ENDPOINT, {
+        const response = await fetch(process.env.AWS_IOT_ENDPOINT, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ id })
         });
-
+        console.log(response);
         return { success: true };
     } catch (error) {
         console.log(error);
