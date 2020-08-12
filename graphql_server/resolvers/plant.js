@@ -34,7 +34,16 @@ const waterPlant = async ({ id }) => {
             },
             body: JSON.stringify({ command: "water", id })
         });
-        console.log(response);
+
+        const { WaterDateTime } = await connectToDatabase();
+
+        const datetime = new Date();
+
+        const waterDateTime = await WaterDateTime.create({
+            plantId: id,
+            datetime
+        });
+
         return { success: true };
     } catch (error) {
         console.log(error);
@@ -43,7 +52,11 @@ const waterPlant = async ({ id }) => {
 
 const getPlant = async ({ id }) => {
     try {
-        const { Plant, SensorReading } = await connectToDatabase();
+        const {
+            Plant,
+            SensorReading,
+            WaterDateTime
+        } = await connectToDatabase();
         const plant = await Plant.findByPk(id);
 
         const sensorReadings = await SensorReading.findAll({
@@ -53,6 +66,16 @@ const getPlant = async ({ id }) => {
         });
 
         plant.sensor_readings = sensorReadings;
+
+        const waterDateTimes = await WaterDateTime.findAll({
+            where: {
+                plantId: id
+            }
+        });
+
+        const dates = waterDateTimes.map(date => date.datetime);
+
+        plant.water_datetimes = dates;
 
         return plant;
     } catch (error) {

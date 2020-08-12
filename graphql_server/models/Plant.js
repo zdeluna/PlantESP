@@ -14,6 +14,7 @@ module.exports = (sequelize, type) => {
     Plant.associate = models => {
         Plant.belongsTo(models.User);
         Plant.hasMany(models.SensorReading);
+        Plant.hasMany(models.WaterDateTime);
     };
 
     return Plant;
