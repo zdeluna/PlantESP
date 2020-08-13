@@ -11,6 +11,7 @@ export const GET_PLANT = gql`
                 humidity
                 soil_moisture
             }
+            water_datetimes
         }
     }
 `;
