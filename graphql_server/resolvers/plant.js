@@ -27,17 +27,17 @@ const createSensorReading = async ({
 
 const waterPlant = async ({ id }) => {
     try {
+        const datetime = new Date();
+
         const response = await fetch(process.env.AWS_IOT_ENDPOINT, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
-            body: JSON.stringify({ command: "water", id })
+            body: JSON.stringify({ command: "water", id, datetime })
         });
 
         const { WaterDateTime } = await connectToDatabase();
-
-        const datetime = new Date();
 
         const waterDateTime = await WaterDateTime.create({
             plantId: id,

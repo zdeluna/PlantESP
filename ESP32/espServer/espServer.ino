@@ -114,6 +114,18 @@ void lwMQTTErr(lwmqtt_err_t reason)
 void messageHandler(String &topic, String &payload){
   Serial.println("Message received");
   Serial.println("incoming: " + topic + " - " + payload);
+
+  StaticJsonDocument<400> doc;
+  
+  DeserializationError err = deserializeJson(doc, payload);
+  if (err) {
+    Serial.print(F("deserializeJson() failed with code "));
+    Serial.println(err.c_str());
+  }
+
+  const char* command = doc["command"];
+  Serial.println("The command is : ");
+  Serial.println(command);
 }
 
 int publishSensorReadings(uint8_t temperature, uint8_t humidity, uint8_t soil_moisture)
@@ -164,6 +176,14 @@ void setup() {
     publishSensorReadings(84, 50, 30);
  
  }
+
+void waterPlant() {
+    Serial.println("Water plant");
+
+}
+
+
+
 
 void getTemperature() {
     //uint8_t temperature = sensor.getTemperature();
