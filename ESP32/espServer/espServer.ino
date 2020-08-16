@@ -2,10 +2,12 @@
 #include <WiFiClientSecure.h>
 #include <MQTTClient.h>
 #include "TemperatureSensor.h"
+#include "SoilSensor.h"
 #include "config.h"
 #include<PubSubClient.h>
 #include<ArduinoJson.h>
 #include "time.h"
+#include <string.h>
 
 #define AWS_IOT_PUBLISH_TOPIC   "esp/pub"
 #define AWS_IOT_SUBSCRIBE_TOPIC "esp/sub"
@@ -24,8 +26,12 @@ const int PLANT_ID = 4;
 
 
 int TEMP_SENSOR_PIN = 14;
-//TemperatureSensor sensor(TEMP_SENSOR_PIN);
+int SOIL_SENSOR_PIN = 1;
+SoilSensor soilSensor(SOIL_SENSOR_PIN);
 
+//TemperatureSensor sensor(TEMP_SENSOR_PIN);
+int reading = soilSensor.getSoilMoisture();
+Serial.println(reading);
 
 const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(3);
 DynamicJsonDocument doc(capacity);
@@ -111,6 +117,10 @@ void lwMQTTErr(lwmqtt_err_t reason)
     Serial.print("Pong timeout");
 }
 
+void waterPlant(){
+  Serial.println("call water plant function");
+}
+
 void messageHandler(String &topic, String &payload){
   Serial.println("Message received");
   Serial.println("incoming: " + topic + " - " + payload);
@@ -126,7 +136,13 @@ void messageHandler(String &topic, String &payload){
   const char* command = doc["command"];
   Serial.println("The command is : ");
   Serial.println(command);
+
+  if (strcmp(command, "water") == 0){
+    waterPlant();
+  }
 }
+
+
 
 int publishSensorReadings(uint8_t temperature, uint8_t humidity, uint8_t soil_moisture)
 {
@@ -171,19 +187,11 @@ void setup() {
   	// Start Serial Communication
   	Serial.begin(115200);
     delay(1000);
-    connectToAWS();
+    //connectToAWS();
     delay(1000); 
-    publishSensorReadings(84, 50, 30);
+    //publishSensorReadings(84, 50, 30);
  
  }
-
-void waterPlant() {
-    Serial.println("Water plant");
-
-}
-
-
-
 
 void getTemperature() {
     //uint8_t temperature = sensor.getTemperature();
