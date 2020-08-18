@@ -1,5 +1,10 @@
 #include "SoilSensor.h"
 
+const int AIR_VALUE = 2675;
+const int WATER_VALUE = 1180;
+int intervals = (AIR_VALUE - WATER_VALUE) / 3;
+
+int soilMoistureValue = 0;
 
 SoilSensor::SoilSensor(int pin) {
     _pin = pin;
@@ -7,8 +12,7 @@ SoilSensor::SoilSensor(int pin) {
 }
 
 int SoilSensor::getSoilMoisture(){
-    int val;
-    val = analogRead(pin);
-    Serial.print(val);
-    return val;
+    soilMoistureValue = analogRead(_pin);
+    Serial.println(soilMoistureValue);
+    return soilMoistureValue;
 }

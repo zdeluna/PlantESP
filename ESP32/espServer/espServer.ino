@@ -1,7 +1,6 @@
-#include "WiFi.h"
 #include <WiFiClientSecure.h>
 #include <MQTTClient.h>
-#include "TemperatureSensor.h"
+//#include "TemperatureSensor.h"
 #include "SoilSensor.h"
 #include "config.h"
 #include<PubSubClient.h>
@@ -26,12 +25,11 @@ const int PLANT_ID = 4;
 
 
 int TEMP_SENSOR_PIN = 14;
-int SOIL_SENSOR_PIN = 1;
+int SOIL_SENSOR_PIN = 0;
 SoilSensor soilSensor(SOIL_SENSOR_PIN);
 
 //TemperatureSensor sensor(TEMP_SENSOR_PIN);
-int reading = soilSensor.getSoilMoisture();
-Serial.println(reading);
+
 
 const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(3);
 DynamicJsonDocument doc(capacity);
@@ -189,7 +187,7 @@ void setup() {
     delay(1000);
     //connectToAWS();
     delay(1000); 
-    //publishSensorReadings(84, 50, 30);
+    
  
  }
 
@@ -202,5 +200,9 @@ void getTemperature() {
 void loop() {
   client.loop();
   delay(1000);
+  int value;
+   value = soilSensor.getSoilMoisture();
+    
+   Serial.println(value);
   
 }
