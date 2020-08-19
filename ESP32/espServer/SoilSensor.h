@@ -4,11 +4,9 @@
 #include "Arduino.h"
 
 class SoilSensor
-
 {
 	public:
 		SoilSensor(int pin);
-		~SoilSensor();
 		int getSoilMoisture();
 
 	private:
@@ -16,4 +14,3 @@ class SoilSensor
 };
 
 #endif
-

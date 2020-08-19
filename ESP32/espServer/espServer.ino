@@ -1,6 +1,6 @@
 #include <WiFiClientSecure.h>
 #include <MQTTClient.h>
-//#include "TemperatureSensor.h"
+#include "TemperatureSensor.h"
 #include "SoilSensor.h"
 #include "config.h"
 #include<PubSubClient.h>
@@ -24,11 +24,11 @@ const char* password = WIFI_PASSWORD;
 const int PLANT_ID = 4;
 
 
-int TEMP_SENSOR_PIN = 14;
-int SOIL_SENSOR_PIN = 0;
-SoilSensor soilSensor(SOIL_SENSOR_PIN);
+int TEMP_SENSOR_PIN = 13;
+int SOIL_SENSOR_PIN = 14;
 
-//TemperatureSensor sensor(TEMP_SENSOR_PIN);
+SoilSensor soilSensor(SOIL_SENSOR_PIN);
+TemperatureSensor sensor(TEMP_SENSOR_PIN);
 
 
 const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(3);
