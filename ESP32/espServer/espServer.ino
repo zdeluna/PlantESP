@@ -26,9 +26,15 @@ const int PLANT_ID = 4;
 
 int TEMP_SENSOR_PIN = 13;
 int SOIL_SENSOR_PIN = 14;
+int RELAY_PIN = 10;
+
 
 SoilSensor soilSensor(SOIL_SENSOR_PIN);
 TemperatureSensor sensor(TEMP_SENSOR_PIN);
+
+unsigned long WATER_TIME = 1000;
+unsigned long delayStart = 0;
+bool isWatering = false;
 
 
 const size_t capacity = JSON_OBJECT_SIZE(1) + JSON_OBJECT_SIZE(3);
@@ -117,6 +123,16 @@ void lwMQTTErr(lwmqtt_err_t reason)
 
 void waterPlant(){
   Serial.println("call water plant function");
+  digitalWrite(RELAY_PIN, HIGH);
+  delayStart = millis();
+  isWatering = true;
+}
+
+void checkWateringState() {
+  if (isWatering && ((millis() - delayStart) >= WATER_TIME)){
+    isWatering = false;
+    digitalWrite(RELAY_PIN, LOW);
+  }
 }
 
 void messageHandler(String &topic, String &payload){
@@ -197,12 +213,13 @@ void getTemperature() {
 }
 
 
+
 void loop() {
   client.loop();
   delay(1000);
   int value;
-   value = soilSensor.getSoilMoisture();
-    
-   Serial.println(value);
+  //value = soilSensor.getSoilMoisture();
+  checkWateringState();  
+  
   
 }
