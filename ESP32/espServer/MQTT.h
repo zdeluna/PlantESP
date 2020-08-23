@@ -16,14 +16,12 @@ class MQTT
   public:
     MQTT();
     void connectToAWS();
-    int publishSensorReadings(unsigned long datetime, uint8_t plantId, uint8_t temperature, uint8_t humidity, uint8_t soil_moisture);
+    int publishSensorReadings(time_t datetime, uint8_t plantId, uint8_t temperature, uint8_t humidity, uint8_t soil_moisture);
     MQTTClient client;
-
+    static void messageHandler(String &topic, String &payload);
 
   private:
     WiFiClientSecure _net;
-    void static messageHandler(String &topic, String &payload);
-    void lwMQTTErr(lwmqtt_err_t reason);
     
 };
 

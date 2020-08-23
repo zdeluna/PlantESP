@@ -1,6 +1,6 @@
 #include "SoilSensor.h"
 
-const int AIR_VALUE = 2675;
+const int AIR_VALUE = 4095;
 const int WATER_VALUE = 1180;
 int interval = (AIR_VALUE - WATER_VALUE) / 10;
 
@@ -16,15 +16,19 @@ SoilSensor::SoilSensor(int pin) {
  */
 
 int SoilSensor::getSoilMoisture(){
-    float sensorValue = 0.0;
+    int sensorValue = 0;
     // Get an average of 10 readings
     for (int i = 0; i < 10; i++){
-      sensorValue = sensorValue + analogRead(_pin);
+      float reading = analogRead(_pin);
+      Serial.println(reading);
+      sensorValue = sensorValue + reading;
     }
 
-   float soilMoisture = sensorValue / 10.0;
+   int soilMoisture = sensorValue / 10;
 
-   float level = (AIR_VALUE - soilMoisture) / interval;
+   int level = (AIR_VALUE - soilMoisture) / interval;
+   Serial.println("level");
+   Serial.println(level);
 
    return level;
 

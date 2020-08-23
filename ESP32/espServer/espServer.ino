@@ -4,12 +4,16 @@
 #include "time.h"
 #include <string.h>
 
+/* Deep Sleep variables */
+#define MICROS_TO_S_FACTOR 1000000   // Conversion from mico to seconds
+#define TIME_TO_SLEEP_HOURS 5              // Sleep time in hours
 
-const int PLANT_ID = 4;
+RTC_DATA_ATTR int bootCount = 0;
 
+const int PLANT_ID = 1;
 
 int TEMP_SENSOR_PIN = 13;
-int SOIL_SENSOR_PIN = 14;
+int SOIL_SENSOR_PIN = 0;
 int RELAY_PIN = 10;
 
 
@@ -46,7 +50,7 @@ void checkWateringState() {
 }
 
 
-unsigned long getLocalTimeNTP() {
+time_t getLocalTimeNTP() {
     configTime(gmtOffset_sec, daylightOffset_sec, ntp_server);
     time_t now;
     struct tm timeinfo;
@@ -66,10 +70,21 @@ void setup() {
   	// Start Serial Communication
   	Serial.begin(115200);
     delay(1000);
-    //connectToAWS();
-    delay(1000); 
+    ++bootCount;
+    Serial.println("Boot number: " + String(bootCount));
     
- 
+    mqtt.connectToAWS();
+    int soilMoisture = soilSensor.getSoilMoisture();
+    Serial.println(soilMoisture);
+    mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, 90, 80, soilMoisture);
+    delay(1000); 
+
+    print_wakeup_reason();
+  
+    // Set timer to 5 seconds
+    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_HOURS * MICROS_TO_S_FACTOR);
+    esp_deep_sleep_start();
+    
  }
 
 void getTemperature() {
@@ -82,9 +97,8 @@ void getTemperature() {
 void loop() {
   mqtt.client.loop();
   delay(1000);
-  int value;
   //value = soilSensor.getSoilMoisture();
-  checkWateringState();  
+  //checkWateringState();  
   
   
 }
