@@ -14,7 +14,7 @@ const int PLANT_ID = 1;
 
 int TEMP_SENSOR_PIN = 13;
 int SOIL_SENSOR_PIN = 0;
-int RELAY_PIN = 10;
+int RELAY_PIN = 14;
 
 
 SoilSensor soilSensor(SOIL_SENSOR_PIN);
@@ -72,19 +72,20 @@ void setup() {
     delay(1000);
     ++bootCount;
     Serial.println("Boot number: " + String(bootCount));
-    
+    /*
     mqtt.connectToAWS();
     int soilMoisture = soilSensor.getSoilMoisture();
     Serial.println(soilMoisture);
-    mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, 90, 80, soilMoisture);
+    mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, 90, 80, 0);
     delay(1000); 
 
-    print_wakeup_reason();
+    //print_wakeup_reason();
   
     // Set timer to 5 seconds
     esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_HOURS * MICROS_TO_S_FACTOR);
     esp_deep_sleep_start();
-    
+    */
+    waterPlant();
  }
 
 void getTemperature() {

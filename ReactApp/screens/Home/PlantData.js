@@ -18,7 +18,8 @@ const PlantData = ({navigation, route}) => {
     }
     if (loading) return <Loading />;
 
-    if (data && data.plant) return <Plant plant={data.plant} />;
+    if (data && data.plant)
+        return <Plant navigation={navigation} plant={data.plant} />;
 };
 
 export default PlantData;

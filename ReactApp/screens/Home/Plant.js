@@ -14,9 +14,8 @@ import {useTheme} from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 import {WATER_PLANT} from '../../graphql/mutations/plant/waterPlant';
 
-const Plant = ({plant}) => {
+const Plant = ({navigation, plant}) => {
     const [name, setName] = useState(plant.name);
-
     const {colors} = useTheme();
     const lastWateredDate = plant.water_datetimes
         ? moment(
@@ -32,22 +31,16 @@ const Plant = ({plant}) => {
 
     return (
         <Center style={styles.container}>
-            <Text style={{color: colors.text, fontSize: 30}}>
-                Temperature:{' '}
-            </Text>
-            <Text style={{color: colors.text, fontSize: 30}}>Humidity: </Text>
-            <Text style={{color: colors.text, fontSize: 30}}>
+            <Text style={{color: colors.text, fontSize: 20}}>{name}</Text>
+            <Text style={{color: colors.text, fontSize: 20}}>
                 Last Watered: {lastWateredDate}
             </Text>
             <GraphData sensor_readings={plant.sensor_readings} />
             <Button
                 style={styles.Button}
-                onPress={() => {
-                    waterPlant({variables: {id: plant.id}});
-                }}
-                title="Manual Water Now"
+                title="Settings"
+                onPress={() => navigation.navigate('Settings')}
             />
-            <Button style={styles.Button} title="Automatic Watering Settings" />
         </Center>
     );
 };
@@ -58,7 +51,7 @@ const styles = StyleSheet.create({
     },
     Button: {
         fontSize: 50,
-        paddingTop: 20,
+        paddingTop: 5,
     },
 });
 

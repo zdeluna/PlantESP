@@ -7,6 +7,7 @@ import {ApolloClient} from 'apollo-client';
 import {useQuery} from '@apollo/react-hooks';
 import PlantData from './PlantData';
 import PlantList from './PlantList';
+import Settings from './Settings';
 
 const Stack = createStackNavigator();
 
@@ -31,6 +32,7 @@ export const HomeStack = () => {
                 component={PlantList}
             />
             <Stack.Screen name="PlantData" component={PlantData} />
+            <Stack.Screen name="Settings" component={Settings} />
         </Stack.Navigator>
     );
 };

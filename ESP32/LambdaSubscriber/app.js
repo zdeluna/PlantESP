@@ -30,7 +30,7 @@ var lambda = new AWS.Lambda();
 
 exports.handler = async (event, context, callback) => {
     try {
-        await validateSensorReadings(event);
+        //await validateSensorReadings(event);
         let { plantId, temperature, humidity, soil_moisture, datetime } = event;
         console.log("Plant Id: " + plantId);
         console.log("Temperature: " + temperature);
