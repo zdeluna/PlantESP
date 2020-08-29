@@ -116,6 +116,26 @@ const createPlant = async ({ name }, { userId }) => {
         };
     } catch (error) {}
 };
+
+const changeSensorSettings = async ({ sensorFrequency, wateringTime }) => {
+    try {
+        let params = {};
+
+        if (sensorFrequency) params.sensorFrequency = sensorFrequency;
+        if (wateringTime) params.wateringTime = wateringTime;
+        console.log(params);
+        /*
+        const response = await fetch(process.env.AWS_IOT_ENDPOINT, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ command: "settings", params })
+        });*/
+        return { success: true };
+    } catch (error) {}
+};
+
 export default {
     Query: {
         plants: (root, args, { userId }) => {
@@ -147,6 +167,9 @@ export default {
         },
         waterPlant: (root, { id }) => {
             return waterPlant({ id });
+        },
+        changeSensorSettings: (root, { sensorFrequency, wateringTime }) => {
+            return changeSensorSettings({ sensorFrequency, wateringTime });
         }
     }
 };

@@ -49,6 +49,10 @@ const schema = gql`
         success: Boolean!
     }
 
+    type ChangeSensorSettingsResponse {
+        success: Boolean!
+    }
+
     type Query {
         users(id: String!): User!
         plants: [Plant]
@@ -68,6 +72,10 @@ const schema = gql`
             humidity: Int
             soil_moisture: Int
         ): CreateSensorReadingResponse
+        changeSensorSettings(
+            sensorFrequency: Int
+            wateringTime: Int
+        ): ChangeSensorSettingsResponse
     }
 
     schema {
