@@ -9,8 +9,10 @@ import {useMutation} from '@apollo/react-hooks';
 
 const Settings = ({navigation, route}) => {
     const {colors} = useTheme();
-    const [sensorFrequency, setSensorFrequency] = useState(8);
-    const [wateringTime, setWateringTime] = useState(1);
+    const [sensorFrequency, setSensorFrequency] = useState(
+        route.params.sensorFrequency,
+    );
+    const [wateringTime, setWateringTime] = useState(route.params.wateringTime);
 
     const [changeSensorSettings] = useMutation(CHANGE_SENSOR_SETTINGS, {
         onCompleted(response) {

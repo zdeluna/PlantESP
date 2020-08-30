@@ -15,6 +15,8 @@ const schema = gql`
         name: String!
         sensor_readings: [SensorReading]
         water_datetimes: [DateTime]
+        sensorFrequency: Int
+        wateringTime: Int
     }
 
     type User {
@@ -64,7 +66,12 @@ const schema = gql`
         signInUser(login: String!, password: String!): Token!
         waterPlant(id: ID!): WaterPlantResponse
         createPlant(name: String!): CreatePlantResponse
-        updatePlant(id: ID!, name: String): Plant
+        updatePlant(
+            id: ID!
+            name: String
+            sensorFrequency: Int
+            wateringTime: Int
+        ): Plant
         createSensorReading(
             plantId: ID!
             datetime: DateTime!
@@ -73,6 +80,7 @@ const schema = gql`
             soil_moisture: Int
         ): CreateSensorReadingResponse
         changeSensorSettings(
+            plantId: ID!
             sensorFrequency: Int
             wateringTime: Int
         ): ChangeSensorSettingsResponse

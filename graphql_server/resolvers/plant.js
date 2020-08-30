@@ -117,7 +117,11 @@ const createPlant = async ({ name }, { userId }) => {
     } catch (error) {}
 };
 
-const changeSensorSettings = async ({ sensorFrequency, wateringTime }) => {
+const changeSensorSettings = async ({
+    plantId,
+    sensorFrequency,
+    wateringTime
+}) => {
     try {
         let params = {};
 
@@ -132,6 +136,12 @@ const changeSensorSettings = async ({ sensorFrequency, wateringTime }) => {
             },
             body: JSON.stringify({ command: "settings", params })
         });*/
+
+        const { Plant } = await connectToDatabase();
+        const plant = await Plant.findByPk(plantId);
+
+        await plant.update({ sensorFrequency, wateringTime });
+
         return { success: true };
     } catch (error) {}
 };
@@ -168,8 +178,15 @@ export default {
         waterPlant: (root, { id }) => {
             return waterPlant({ id });
         },
-        changeSensorSettings: (root, { sensorFrequency, wateringTime }) => {
-            return changeSensorSettings({ sensorFrequency, wateringTime });
+        changeSensorSettings: (
+            root,
+            { plantId, sensorFrequency, wateringTime }
+        ) => {
+            return changeSensorSettings({
+                plantId,
+                sensorFrequency,
+                wateringTime
+            });
         }
     }
 };

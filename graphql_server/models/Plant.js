@@ -8,6 +8,14 @@ module.exports = (sequelize, type) => {
         name: {
             type: type.STRING,
             allowNull: true
+        },
+        wateringTime: {
+            type: type.INTEGER,
+            defaultValue: "1"
+        },
+        sensorFrequency: {
+            type: type.INTEGER,
+            defaultValue: "8"
         }
     });
 
