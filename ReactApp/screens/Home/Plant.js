@@ -39,7 +39,7 @@ const Plant = ({navigation, plant}) => {
             <Button
                 style={styles.Button}
                 title="Settings"
-                onPress={() => navigation.navigate('Settings')}
+                onPress={() => navigation.navigate('Settings', {id: plant.id})}
             />
         </Center>
     );
