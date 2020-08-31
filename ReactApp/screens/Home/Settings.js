@@ -21,6 +21,12 @@ const Settings = ({navigation, route}) => {
         },
     });
 
+    console.log('sensorFrequency');
+    console.log(sensorFrequency);
+
+    console.log('wateringTime');
+    console.log(wateringTime);
+
     const saveSettings = sensorFrequency => {
         console.log('Save settings');
         console.log(sensorFrequency);

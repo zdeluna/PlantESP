@@ -43,7 +43,7 @@ const Plant = ({navigation, plant}) => {
                     navigation.navigate('Settings', {
                         id: plant.id,
                         sensorFrequency: plant.sensorFrequency,
-                        waterTiming: plant.waterTiming,
+                        wateringTime: plant.wateringTime,
                     })
                 }
             />

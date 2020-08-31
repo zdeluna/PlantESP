@@ -12,6 +12,8 @@ export const GET_PLANT = gql`
                 soil_moisture
             }
             water_datetimes
+            sensorFrequency
+            wateringTime
         }
     }
 `;
