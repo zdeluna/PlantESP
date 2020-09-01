@@ -88,7 +88,7 @@ const updatePlant = async updatedFields => {
         const { Plant } = await connectToDatabase();
         const plant = await Plant.findByPk(updatedFields.id);
 
-        await plant.update(updatedFields);
+        return await plant.update(updatedFields);
     } catch (error) {
         console.log(error);
     }

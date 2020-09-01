@@ -4,7 +4,7 @@ import {useTheme} from '@react-navigation/native';
 import {Center} from '../../components/Center';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
-import {CHANGE_SENSOR_SETTINGS} from '../../graphql/mutations/plant/changeSensorSettings';
+import {UPDATE_PLANT} from '../../graphql/mutations/plant/updatePlant';
 import {useMutation} from '@apollo/react-hooks';
 
 const Settings = ({navigation, route}) => {
@@ -14,7 +14,7 @@ const Settings = ({navigation, route}) => {
     );
     const [wateringTime, setWateringTime] = useState(route.params.wateringTime);
 
-    const [changeSensorSettings] = useMutation(CHANGE_SENSOR_SETTINGS, {
+    const [updatePlant] = useMutation(UPDATE_PLANT, {
         onCompleted(response) {
             console.log(response);
             navigation.navigate('PlantData', {id: route.params.id});
@@ -31,8 +31,9 @@ const Settings = ({navigation, route}) => {
         console.log('Save settings');
         console.log(sensorFrequency);
 
-        changeSensorSettings({
+        updatePlant({
             variables: {
+                id: route.params.id,
                 sensorFrequency: sensorFrequency,
                 wateringTime: wateringTime,
             },
