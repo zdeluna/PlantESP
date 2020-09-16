@@ -12,11 +12,15 @@ You will also need XCode to run the React Native application.
 
 ### Part List
 
-ESP32 microcontroller
-DHT 11 or DHT 22 Temperature Sensor
-Capacitive Soil Moisture Sensor
-3-5V Water Pump
-Relay
-External Power to the pump such as 2 AA batteries.
-Jumper wires
-Breadboard
+-   ESP32 microcontroller
+-   DHT 11 or DHT 22 Temperature Sensor
+-   Capacitive Soil Moisture Sensor
+-   3-5V Submersible Water Pump
+-   3V Relay
+-   External Power to the pump such as 2 AA batteries.
+-   Jumper wires
+-   Breadboard
+
+## Authors
+
+-   **Zach DeLuna** - _Initial work_ - (https://github.com/zdeluna)
