@@ -6,22 +6,22 @@
 
 /* Deep Sleep variables */
 #define MICROS_TO_S_FACTOR 1000000   // Conversion from mico to seconds
-#define TIME_TO_SLEEP_HOURS 5              // Sleep time in hours
+#define TIME_TO_SLEEP_HOURS 0.1              // Sleep time in hours
 
 RTC_DATA_ATTR int bootCount = 0;
 
-const int PLANT_ID = 1;
+const int PLANT_ID = 2;
 
 int TEMP_SENSOR_PIN = 13;
-int SOIL_SENSOR_PIN = 0;
-int RELAY_PIN = 14;
+int SOIL_SENSOR_PIN = 32;
+int RELAY_PIN = 26;
 
 
 SoilSensor soilSensor(SOIL_SENSOR_PIN);
 TemperatureSensor sensor(TEMP_SENSOR_PIN);
 MQTT mqtt;
 
-unsigned long WATER_TIME = 1000;
+unsigned long WATER_TIME = 5000;
 unsigned long delayStart = 0;
 bool isWatering = false;
 
@@ -72,20 +72,25 @@ void setup() {
     delay(1000);
     ++bootCount;
     Serial.println("Boot number: " + String(bootCount));
-    /*
+    
     mqtt.connectToAWS();
+    /* This function will get the capacitive soil sensor readings and average them. It will
+     *  return a value between 0 and 10 where 0 is completely dry and 10 is completely wet.
+     */
     int soilMoisture = soilSensor.getSoilMoisture();
-    Serial.println(soilMoisture);
-    mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, 90, 80, 0);
-    delay(1000); 
+    Serial.println("Soil moisture level: " + String(soilMoisture));
+
+    mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, 90, 80, soilMoisture);
+    
+    pinMode(RELAY_PIN, OUTPUT);
+    //if (soilMoisture < 2) waterPlant(); 
 
     //print_wakeup_reason();
   
     // Set timer to 5 seconds
-    esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_HOURS * MICROS_TO_S_FACTOR);
-    esp_deep_sleep_start();
-    */
-    waterPlant();
+    //esp_sleep_enable_timer_wakeup(TIME_TO_SLEEP_HOURS * MICROS_TO_S_FACTOR);
+    //esp_deep_sleep_start();
+   
  }
 
 void getTemperature() {
@@ -99,7 +104,7 @@ void loop() {
   mqtt.client.loop();
   delay(1000);
   //value = soilSensor.getSoilMoisture();
-  //checkWateringState();  
+  checkWateringState();  
   
   
 }
