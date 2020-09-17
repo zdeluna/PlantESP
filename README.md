@@ -27,6 +27,12 @@ Next, install the dependencies of the React Native App.
 cd ReactApp && npm install
 ```
 
+Then, install the iOS dependencies using CocoaPods.
+
+```
+cd ios && pod install
+```
+
 Run the Metro Bundler
 
 ```
