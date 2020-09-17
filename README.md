@@ -8,7 +8,36 @@ This project aims to create a self watering system using an ESP32 microcontrolle
 
 ### Prerequistes
 
-You will also need XCode to run the React Native application.
+You will also need XCode to run the React Native application using React Native CLI
+
+To run the React Native App after installing Homebrew using the instructions outlined in https://facebook.github.io/react-native/docs/getting-started
+
+```
+brew install yarn
+brew install node
+brew install watchman
+brew tap AdoptOpenJDK/openjdk
+brew cask install adoptopenjdk8
+npm install -g react-native-cli
+```
+
+Next, install the dependencies of the React Native App.
+
+```
+cd ReactApp && npm install
+```
+
+Run the Metro Bundler
+
+```
+npx react-native start
+```
+
+Then run the iOS Simulator
+
+```
+npx react-native run-ios
+```
 
 ### Part List
 
