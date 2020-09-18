@@ -17,6 +17,7 @@ export const Routes = () => {
             ...DefaultTheme.colors,
             background: '#0B2B36',
             text: '#FFFFFF',
+            header: '#1378F6',
         },
     };
 

@@ -31,33 +31,41 @@ const Plant = ({navigation, plant}) => {
 
     return (
         <Center style={styles.container}>
-            <Text style={{color: colors.text, fontSize: 20}}>{name}</Text>
+            <Text style={{color: colors.header, paddingTop: 20, fontSize: 30}}>
+                {name}
+            </Text>
             <Text style={{color: colors.text, fontSize: 20}}>
                 Last Watered: {lastWateredDate}
             </Text>
             <GraphData sensor_readings={plant.sensor_readings} />
-            <Button
+            <TouchableOpacity
                 style={styles.Button}
-                title="Settings"
                 onPress={() =>
                     navigation.navigate('Settings', {
                         id: plant.id,
                         sensorFrequency: plant.sensorFrequency,
                         wateringTime: plant.wateringTime,
                     })
-                }
-            />
+                }>
+                <Text style={styles.ButtonText}>Settings</Text>
+            </TouchableOpacity>
         </Center>
     );
 };
 
 const styles = StyleSheet.create({
+    plantName: {
+        color: '#111111',
+    },
     container: {
         display: 'flex',
     },
     Button: {
-        fontSize: 50,
-        paddingTop: 5,
+        paddingBottom: 30,
+    },
+    ButtonText: {
+        color: '#1378F6',
+        fontSize: 25,
     },
 });
 

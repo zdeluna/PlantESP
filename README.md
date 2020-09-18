@@ -5,6 +5,7 @@
 This project aims to create a self watering system using an ESP32 microcontroller, various hardware components, and a mobile device running a React Native Application. Users will be able to monitor soil moisture level, temperature, and humidity on their mobile device. The microcontroller will communicate with the mobile device using MQTT protocol. All data will be store on an Amazon RDS database.
 
 ![Screenshot 1](/docs/images/hardware-setup.png "Screenshot 1")
+![Screenshot 2](/docs/images/simulator-screenshot.png "Screenshot 2")
 
 ### Prerequistes
 
