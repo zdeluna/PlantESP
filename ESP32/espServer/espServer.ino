@@ -12,7 +12,7 @@ RTC_DATA_ATTR int bootCount = 0;
 
 const int PLANT_ID = 2;
 
-int TEMP_SENSOR_PIN = 13;
+int TEMP_SENSOR_PIN = 14;
 int SOIL_SENSOR_PIN = 32;
 int RELAY_PIN = 26;
 
@@ -79,8 +79,12 @@ void setup() {
      */
     int soilMoisture = soilSensor.getSoilMoisture();
     Serial.println("Soil moisture level: " + String(soilMoisture));
-
-    mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, 90, 80, soilMoisture);
+    uint8_t temperature = sensor.getTemperature();
+    uint8_t humidity = sensor.getHumidity();
+    Serial.println(temperature);
+    Serial.println(humidity);
+    Serial.println("temperature: " + String(temperature));
+    mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, temperature, humidity, soilMoisture);
     
     pinMode(RELAY_PIN, OUTPUT);
     //if (soilMoisture < 2) waterPlant(); 
