@@ -29,6 +29,6 @@ yarn-error.log
 package-lock.json
 *.env
 AWSCLIV2.pkg
-*.json
 ESP32/espServer/config.h
 *.zip
+graphql_server/secrets.json

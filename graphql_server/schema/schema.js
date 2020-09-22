@@ -47,6 +47,10 @@ const schema = gql`
         success: Boolean!
     }
 
+    type AddWateringTimeResponse {
+        success: Boolean!
+    }
+
     type WaterPlantResponse {
         success: Boolean!
     }
@@ -71,6 +75,7 @@ const schema = gql`
             name: String
             sensorFrequency: Int
             wateringTime: Int
+            water_datetimes: [DateTime]
         ): Plant
         createSensorReading(
             plantId: ID!
@@ -84,6 +89,10 @@ const schema = gql`
             sensorFrequency: Int
             wateringTime: Int
         ): ChangeSensorSettingsResponse
+        addWateringTime(
+            plantId: ID!
+            datetime: DateTime!
+        ): AddWateringTimeResponse
     }
 
     schema {

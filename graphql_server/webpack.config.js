@@ -11,18 +11,9 @@ module.exports = {
     module: {
         rules: [
             {
-                test: /\.js$/,
-                use: [
-                    "imports-loader?graphql",
-                    {
-                        loader: "babel-loader",
-                        options: {
-                            presets: [
-                                ["@babel/env", { targets: { node: "6.10" } }]
-                            ]
-                        }
-                    }
-                ]
+                test: /\.(graphql|gql)$/,
+                exclude: /node_modules/,
+                loader: "graphql-tag/loader"
             }
         ]
     },

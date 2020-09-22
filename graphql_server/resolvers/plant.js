@@ -146,6 +146,18 @@ const changeSensorSettings = async ({
     } catch (error) {}
 };
 
+const addWateringTime = async ({ plantId, datetime }) => {
+    try {
+        const plant = await Plant.findByPk(plantId);
+        let water_datetimes = plant.water_datetimes;
+        water_datetimes.push(datetime);
+
+        await plant.update({ water_datetimes });
+
+        return { success: true };
+    } catch (error) {}
+};
+
 export default {
     Query: {
         plants: (root, args, { userId }) => {
@@ -187,6 +199,9 @@ export default {
                 sensorFrequency,
                 wateringTime
             });
+        },
+        addWateringTime: (root, { plantId, datetime }) => {
+            return addWateringTime({ plantId, datetime });
         }
     }
 };

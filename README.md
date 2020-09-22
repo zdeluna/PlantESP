@@ -50,6 +50,7 @@ npx react-native run-ios
 
 -   ESP32 microcontroller
 -   DHT 11 or DHT 22 Temperature Sensor
+-   10k Ohm resistor
 -   Capacitive Soil Moisture Sensor
 -   3-5V Submersible Water Pump
 -   3V Relay
