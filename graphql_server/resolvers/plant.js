@@ -148,14 +148,17 @@ const changeSensorSettings = async ({
 
 const addWateringTime = async ({ plantId, datetime }) => {
     try {
-        const plant = await Plant.findByPk(plantId);
-        let water_datetimes = plant.water_datetimes;
-        water_datetimes.push(datetime);
+        const { WaterDateTime } = await connectToDatabase();
 
-        await plant.update({ water_datetimes });
+        const waterDateTime = await WaterDateTime.create({
+            plantId: plantId,
+            datetime
+        });
 
         return { success: true };
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 export default {
