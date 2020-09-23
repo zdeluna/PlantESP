@@ -3,6 +3,16 @@
 const connectToDatabase = require("../config/db");
 const fetch = require("node-fetch");
 
+/**
+ * Create a sensor reading that will be sent from the microcontroller to monitor a plant
+ * @param {Number} plantId
+ * @param {String} datetime
+ * @param {Number} temperature
+ * @param {Number} humidity
+ * @param {Number} soil moisture
+ * @Return {Promise} - Response Object
+ */
+
 const createSensorReading = async ({
     plantId,
     datetime,
@@ -24,6 +34,11 @@ const createSensorReading = async ({
         console.log(error);
     }
 };
+
+/**
+ * Send an HTTP Request to the lambda subscriber function that is used by the micocontroller
+ * @param {Number} id
+ */
 
 const waterPlant = async ({ id }) => {
     try {
@@ -49,6 +64,12 @@ const waterPlant = async ({ id }) => {
         console.log(error);
     }
 };
+
+/**
+ * Get an instance of a plant using the id
+ * @param {Number} id - Plant Id
+ * @Return {Promise} - Plant
+ */
 
 const getPlant = async ({ id }) => {
     try {
@@ -83,6 +104,12 @@ const getPlant = async ({ id }) => {
     }
 };
 
+/**
+ * Update a plant using the updated fields parameter
+ * @param {Object} - updatedFields
+ * @Return {Promise} - Updated plant instance
+ */
+
 const updatePlant = async updatedFields => {
     try {
         const { Plant } = await connectToDatabase();
@@ -93,6 +120,12 @@ const updatePlant = async updatedFields => {
         console.log(error);
     }
 };
+
+/**
+ * Get all of the plants of a user
+ * @param {Number} - userId
+ * @Return {Promise} - Array of User's Plants
+ */
 
 const getPlants = async userId => {
     try {
@@ -106,6 +139,13 @@ const getPlants = async userId => {
     } catch (error) {}
 };
 
+/**
+ * Create a new plant
+ * @param {String} - Name - name of plant
+ * @param {Number} - userId
+ * @Return {Promise} - Array of User's Plants
+ */
+
 const createPlant = async ({ name }, { userId }) => {
     try {
         const { Plant } = await connectToDatabase();
@@ -116,6 +156,14 @@ const createPlant = async ({ name }, { userId }) => {
         };
     } catch (error) {}
 };
+
+/**
+ * Change settings of microcontroller. This includes the frequency of monitoring plant and how long to water.
+ * @param {Number} - plantId
+ * @param {Number} - sensorFrequency - How many hours between measurements
+ * @param {Number} - wateringTime - The amount of seconds to water
+ * @Return {Promise} - Reponse Object
+ */
 
 const changeSensorSettings = async ({
     plantId,
@@ -145,6 +193,14 @@ const changeSensorSettings = async ({
         return { success: true };
     } catch (error) {}
 };
+
+/**
+ * Add a datetime to a plant's watering times array
+ * @param {Number} - plantId
+ * @param {String} - datetime - ISO date string in the format
+ *  YYYY - MM - DD T HH : mm : ss
+ * @Return {Promise} - Response Object
+ */
 
 const addWateringTime = async ({ plantId, datetime }) => {
     try {
