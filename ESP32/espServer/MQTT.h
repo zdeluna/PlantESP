@@ -17,6 +17,7 @@ class MQTT
     MQTT();
     void connectToAWS();
     int publishSensorReadings(time_t datetime, uint8_t plantId, uint8_t temperature, uint8_t humidity, uint8_t soil_moisture);
+    int publishWateringTime(time_t datetime, uint8_t plantId);
     MQTTClient client;
     static void messageHandler(String &topic, String &payload);
 

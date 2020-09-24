@@ -68,7 +68,8 @@ void MQTT::connectToAWS(){
 int MQTT::publishSensorReadings(time_t datetime, uint8_t plantId, uint8_t temperature, uint8_t humidity, uint8_t soil_moisture)
 {
   StaticJsonDocument<200> doc;
-
+    
+  doc["command"] = "sensorReading";
   doc["plantId"] = plantId;
   doc["datetime"] = datetime;
   doc["temperature"] = temperature;
@@ -86,4 +87,27 @@ int MQTT::publishSensorReadings(time_t datetime, uint8_t plantId, uint8_t temper
   Serial.println("Message has been published successfully");
 
   return 1;
+}
+
+int MQTT::publishWateringTime(time_t datetime, uint8_t plantId)
+{
+  StaticJsonDocument<200> doc;
+  doc["command"] = "wateringTime";
+  doc["plantId"] = plantId;
+  doc["datetime"] = datetime;
+
+  char jsonBuffer[512];
+  serializeJson(doc, jsonBuffer); 
+  client.publish(AWS_IOT_PUBLISH_TOPIC, jsonBuffer);
+  Serial.println("Publish Watering Time message");
+
+  while(!client.publish(AWS_IOT_PUBLISH_TOPIC)){
+    Serial.println("Retrying publishing message. Message did not publish correctly.");
+  }
+  Serial.println("Message has been published successfully");
+
+  return 1;
+
+
+
 }

@@ -28,109 +28,123 @@ var dynamo = new AWS.DynamoDB.DocumentClient();
 var table = process.env.TABLE_NAME;
 var lambda = new AWS.Lambda();
 
+let GRAPHQL_URI =
+    "https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql";
+
+const httpLink = createHttpLink({
+    uri: GRAPHQL_URI,
+    headers: {
+        "client-name": "Plant ESP [React App]",
+        "client-version": "1.0.0"
+    },
+    fetch: fetch
+});
+const cache = new InMemoryCache({
+    dataIdFromObject: object => object.id
+});
+
+const client = new ApolloClient({
+    link: httpLink,
+    cache: cache
+});
+
+const CREATE_SENSOR_READING = gql`
+    mutation createSensorReading(
+        $plantId: ID!
+        $temperature: Int
+        $humidity: Int
+        $soil_moisture: Int
+        $datetime: DateTime!
+    ) {
+        createSensorReading(
+            plantId: $plantId
+            temperature: $temperature
+            humidity: $humidity
+            soil_moisture: $soil_moisture
+            datetime: $datetime
+        ) {
+            success
+        }
+    }
+`;
+
+const GET_PLANT = gql`
+    query getPlant($id: ID!) {
+        plant(id: $id) {
+            name
+            id
+            sensor_readings {
+                datetime
+                temperature
+                humidity
+                soil_moisture
+            }
+        }
+    }
+`;
+
 exports.handler = async (event, context, callback) => {
     try {
         //await validateSensorReadings(event);
-        let { plantId, temperature, humidity, soil_moisture, datetime } = event;
-        console.log("Plant Id: " + plantId);
-        console.log("Temperature: " + temperature);
-        console.log("Humidity: " + humidity);
-        console.log("Soil Moisture: " + soil_moisture);
-        console.log("Datetime: " + datetime);
 
-        if (datetime) datetime = new Date(datetime * 1000).toISOString();
+        let command = event.command;
 
-        const newSensorReading = {
+        if (command == "sensorReading")
+            publishSensorReadings({
+                plantId: event.plantId,
+                temperature: event.temperature,
+                humidity: event.humidity,
+                soil_moisture: event.soil_moisture,
+                datetime: event.datetime
+            });
+    } catch (error) {
+        console.log("ERROR found: " + error);
+    }
+};
+
+const publishSensorReadings = () => ({
+    plantId,
+    temperature,
+    humidity,
+    soil_moisture,
+    datetime
+});
+{
+    if (datetime) datetime = new Date(datetime * 1000).toISOString();
+
+    const newSensorReading = {
+        plantId,
+        temperature,
+        humidity,
+        soil_moisture,
+        datetime
+    };
+
+    // Check to make sure sensor reading does already exist
+    const plant = await client.query({
+        query: GET_PLANT,
+        variables: { id: plantId }
+    });
+
+    if (plant && plant.sensor_readings)
+        checkForDuplicate({
+            sensorReadings: data.sensor_readings,
+            newSensorReading
+        });
+
+    const response = await client.mutate({
+        mutation: CREATE_SENSOR_READING,
+        variables: {
             plantId,
             temperature,
             humidity,
             soil_moisture,
             datetime
-        };
-
-        let GRAPHQL_URI =
-            "https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql";
-
-        const httpLink = createHttpLink({
-            uri: GRAPHQL_URI,
-            headers: {
-                "client-name": "Plant ESP [React App]",
-                "client-version": "1.0.0"
-            },
-            fetch: fetch
-        });
-        const cache = new InMemoryCache({
-            dataIdFromObject: object => object.id
-        });
-
-        const client = new ApolloClient({
-            link: httpLink,
-            cache: cache
-        });
-
-        const CREATE_SENSOR_READING = gql`
-            mutation createSensorReading(
-                $plantId: ID!
-                $temperature: Int
-                $humidity: Int
-                $soil_moisture: Int
-                $datetime: DateTime!
-            ) {
-                createSensorReading(
-                    plantId: $plantId
-                    temperature: $temperature
-                    humidity: $humidity
-                    soil_moisture: $soil_moisture
-                    datetime: $datetime
-                ) {
-                    success
-                }
-            }
-        `;
-
-        const GET_PLANT = gql`
-            query getPlant($id: ID!) {
-                plant(id: $id) {
-                    name
-                    id
-                    sensor_readings {
-                        datetime
-                        temperature
-                        humidity
-                        soil_moisture
-                    }
-                }
-            }
-        `;
-
-        // Check to make sure sensor reading does already exist
-        const plant = await client.query({
-            query: GET_PLANT,
-            variables: { id: plantId }
-        });
-
-        if (plant && plant.sensor_readings)
-            checkForDuplicate({
-                sensorReadings: data.sensor_readings,
-                newSensorReading
-            });
-
-        const response = await client.mutate({
-            mutation: CREATE_SENSOR_READING,
-            variables: {
-                plantId,
-                temperature,
-                humidity,
-                soil_moisture,
-                datetime
-            }
-        });
-        console.log("RESPONSE is " + response);
-        return { response };
-    } catch (error) {
-        console.log("ERROR found: " + error);
-    }
-};
+        }
+    });
+    console.log("RESPONSE is " + response);
+    return { response };
+}
 
 const checkForDuplicate = ({ sensorReadings, newSensorReading }) => {
     return new Promise((resolve, reject) => {
