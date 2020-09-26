@@ -86,7 +86,10 @@ void setup() {
     Serial.println("temperature: " + String(temperature));
     mqtt.publishSensorReadings(getLocalTimeNTP(), PLANT_ID, temperature, humidity, soilMoisture);
     
-    pinMode(RELAY_PIN, OUTPUT);
+
+    mqtt.publishWateringTime(getLocalTimeNTP(), PLANT_ID);
+
+    //pinMode(RELAY_PIN, OUTPUT);
     //if (soilMoisture < 2) waterPlant(); 
 
     //print_wakeup_reason();

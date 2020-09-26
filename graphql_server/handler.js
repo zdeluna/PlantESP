@@ -1,9 +1,10 @@
 "use strict";
+
 const { ApolloServer } = require("apollo-server-lambda");
 const { schema } = require("./schema/schema");
 const { resolvers } = require("./resolvers");
 const jwt = require("jsonwebtoken");
-
+const test = "";
 const getUserId = async token => {
     const tokenString = token.replace("Bearer ", "");
     try {

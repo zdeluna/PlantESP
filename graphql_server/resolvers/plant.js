@@ -208,9 +208,8 @@ const addWateringTime = async ({ plantId, datetime }) => {
 
         const waterDateTime = await WaterDateTime.create({
             plantId: plantId,
-            datetime
+            datetime: datetime
         });
-
         return { success: true };
     } catch (error) {
         console.log(error);

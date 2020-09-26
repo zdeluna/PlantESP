@@ -15,18 +15,16 @@
 
 var AWS = require("aws-sdk");
 var uuidv1 = require("uuid/v1");
-const https = require("https");
 const gql = require("graphql-tag");
 const { ApolloClient } = require("apollo-client");
 const { createHttpLink } = require("apollo-link-http");
 const { useMutation, useQuery } = require("@apollo/react-hooks");
 const { InMemoryCache } = require("apollo-cache-inmemory");
 
-const fetch = require("node-fetch");
-
 var dynamo = new AWS.DynamoDB.DocumentClient();
 var table = process.env.TABLE_NAME;
 var lambda = new AWS.Lambda();
+const fetch = require("node-fetch");
 
 let GRAPHQL_URI =
     "https://bj6gqabbda.execute-api.us-east-2.amazonaws.com/dev/graphql";
@@ -68,6 +66,14 @@ const CREATE_SENSOR_READING = gql`
     }
 `;
 
+const ADD_WATERING_TIME = gql`
+    mutation addWateringTime($plantId: ID!, $datetime: DateTime!) {
+        addWateringTime(plantId: $plantId, datetime: $datetime) {
+            success
+        }
+    }
+`;
+
 const GET_PLANT = gql`
     query getPlant($id: ID!) {
         plant(id: $id) {
@@ -86,30 +92,35 @@ const GET_PLANT = gql`
 exports.handler = async (event, context, callback) => {
     try {
         //await validateSensorReadings(event);
-
+        console.log(event);
         let command = event.command;
 
         if (command == "sensorReading")
-            publishSensorReadings({
+            return await publishSensorReadings({
                 plantId: event.plantId,
                 temperature: event.temperature,
                 humidity: event.humidity,
                 soil_moisture: event.soil_moisture,
                 datetime: event.datetime
             });
+        else if (command == "wateringTime") {
+            return await addWateringTime({
+                plantId: event.plantId,
+                datetime: event.datetime
+            });
+        }
     } catch (error) {
         console.log("ERROR found: " + error);
     }
 };
 
-const publishSensorReadings = () => ({
+const publishSensorReadings = async ({
     plantId,
     temperature,
     humidity,
     soil_moisture,
     datetime
-});
-{
+}) => {
     if (datetime) datetime = new Date(datetime * 1000).toISOString();
 
     const newSensorReading = {
@@ -128,7 +139,7 @@ const publishSensorReadings = () => ({
 
     if (plant && plant.sensor_readings)
         checkForDuplicate({
-            sensorReadings: data.sensor_readings,
+            sensorReadings: plant.sensor_readings,
             newSensorReading
         });
 
@@ -144,7 +155,7 @@ const publishSensorReadings = () => ({
     });
     console.log("RESPONSE is " + response);
     return { response };
-}
+};
 
 const checkForDuplicate = ({ sensorReadings, newSensorReading }) => {
     return new Promise((resolve, reject) => {
@@ -156,6 +167,19 @@ const checkForDuplicate = ({ sensorReadings, newSensorReading }) => {
         }
         resolve();
     });
+};
+
+const addWateringTime = async ({ plantId, datetime }) => {
+    if (datetime) datetime = new Date(datetime * 1000).toISOString();
+
+    const response = await client.mutate({
+        mutation: ADD_WATERING_TIME,
+        variables: {
+            plantId,
+            datetime
+        }
+    });
+    return { response };
 };
 
 const validateSensorReadings = ({
