@@ -7,6 +7,10 @@ This project aims to create a self watering system using an ESP32 microcontrolle
 ![Screenshot 1](/docs/images/hardware-setup.png "Screenshot 1")
 ![Screenshot 2](/docs/images/simulator-screenshot.png "Screenshot 2")
 
+### Software Architecture
+
+![Screenshot 3](/docs/images/software_architecture.png "Screenshot 3")
+
 ### Prerequistes
 
 You will also need XCode to run the React Native application using React Native CLI

@@ -100,17 +100,9 @@ void setup() {
    
  }
 
-void getTemperature() {
-    //uint8_t temperature = sensor.getTemperature();
-    //return temperature;
-}
-
-
-
 void loop() {
   mqtt.client.loop();
   delay(1000);
-  //value = soilSensor.getSoilMoisture();
   checkWateringState();  
   
   
