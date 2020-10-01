@@ -23,6 +23,14 @@ const Plant = ({navigation, plant}) => {
           ).format('DD-MMM')
         : '';
 
+    const lastSensorReadings =
+        plant.sensor_readings[plant.sensor_readings.length - 1];
+
+    const lastSensorDate = lastSensorReadings.datetime
+        ? moment(lastSensorReadings.datetime).format('DD-MMM')
+        : '';
+
+    console.log(lastSensorReadings);
     const [waterPlant] = useMutation(WATER_PLANT, {
         onCompleted(response) {
             console.log(response);
@@ -34,10 +42,25 @@ const Plant = ({navigation, plant}) => {
             <Text style={{color: colors.header, paddingTop: 20, fontSize: 30}}>
                 {name}
             </Text>
+            <View style={styles.sensorInfoContainer}>
+                <Text style={styles.sensorText}>
+                    Temperature: {lastSensorReadings.temperature}
+                </Text>
+                <Text style={styles.sensorText}>
+                    Humidity: {lastSensorReadings.humidity}
+                </Text>
+                <Text style={styles.sensorText}>
+                    Soil Moisture: {lastSensorReadings.soil_moisture}
+                </Text>
+                <Text style={styles.sensorText}>
+                    Measured on: {lastSensorDate}
+                </Text>
+            </View>
+            <GraphData sensor_readings={plant.sensor_readings} />
             <Text style={{color: colors.text, fontSize: 20}}>
                 Last Watered: {lastWateredDate}
             </Text>
-            <GraphData sensor_readings={plant.sensor_readings} />
+
             <TouchableOpacity
                 style={styles.Button}
                 onPress={() =>
@@ -66,6 +89,15 @@ const styles = StyleSheet.create({
     ButtonText: {
         color: '#1378F6',
         fontSize: 25,
+    },
+    sensorInfoContainer: {
+        marginTop: 10,
+        borderColor: '#ffffff',
+        height: 30,
+    },
+    sensorText: {
+        fontSize: 20,
+        color: '#ffffff',
     },
 });
 

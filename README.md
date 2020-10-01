@@ -7,13 +7,13 @@ This project aims to create a self watering system using an ESP32 microcontrolle
 ![Screenshot 1](/docs/images/hardware-setup.png "Screenshot 1")
 ![Screenshot 2](/docs/images/simulator-screenshot.png "Screenshot 2")
 
-### Software Architecture
+## Software Architecture
 
 ![Screenshot 3](/docs/images/software_architecture.png "Screenshot 3")
 
 This project uses MQTT protocol to facilitate communication between the ESP32 and the MQTT broker running on AWS IoT Core. The ESP32 will send/receive commands and sensor data to the broker using the topics esp32/pub and esp32/sub. The AWS IoT Core will interpret the MQTT message and send the data to one of two AWS Lambda functions representing each topic. The Lambda functions will either send a MQTT message back to the ESP32 or will communicate with the GraphQL server. The GraphQL server will make requests to the AWS Relational Database Service (RDS) to store sensor data in an MySQL database.
 
-### Prerequistes
+## Prerequistes
 
 You will also need XCode to run the React Native application using React Native CLI
 
@@ -52,7 +52,7 @@ Then run the iOS Simulator
 npx react-native run-ios
 ```
 
-### Part List
+## Part List
 
 -   ESP32 microcontroller
 -   DHT 11 or DHT 22 Temperature Sensor
