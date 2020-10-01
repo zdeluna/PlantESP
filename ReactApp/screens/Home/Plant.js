@@ -7,12 +7,14 @@ import {
     FlatList,
     Button,
     StyleSheet,
+    Image,
 } from 'react-native';
 import GraphData from './GraphData';
 import moment from 'moment';
 import {useTheme} from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 import {WATER_PLANT} from '../../graphql/mutations/plant/waterPlant';
+import {PLANT_ICON} from '../../src/images';
 
 const Plant = ({navigation, plant}) => {
     const [name, setName] = useState(plant.name);
@@ -39,9 +41,16 @@ const Plant = ({navigation, plant}) => {
 
     return (
         <Center style={styles.container}>
-            <Text style={{color: colors.header, paddingTop: 20, fontSize: 30}}>
-                {name}
-            </Text>
+            <View style={styles.plantNameContainer}>
+                <Image style={styles.icons} source={PLANT_ICON} />
+                <Text
+                    style={{
+                        color: colors.header,
+                        fontSize: 30,
+                    }}>
+                    {name}
+                </Text>
+            </View>
             <View style={styles.sensorInfoContainer}>
                 <Text style={styles.sensorText}>
                     Temperature: {lastSensorReadings.temperature}
@@ -57,7 +66,7 @@ const Plant = ({navigation, plant}) => {
                 </Text>
             </View>
             <GraphData sensor_readings={plant.sensor_readings} />
-            <Text style={{color: colors.text, fontSize: 20}}>
+            <Text style={{color: colors.text, marginBottom: 10, fontSize: 20}}>
                 Last Watered: {lastWateredDate}
             </Text>
 
@@ -98,6 +107,14 @@ const styles = StyleSheet.create({
     sensorText: {
         fontSize: 20,
         color: '#ffffff',
+    },
+    icons: {
+        width: 40,
+        height: 40,
+    },
+    plantNameContainer: {
+        flexDirection: 'row',
+        marginTop: 10,
     },
 });
 
