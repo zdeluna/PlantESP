@@ -14,7 +14,7 @@ import moment from 'moment';
 import {useTheme} from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 import {WATER_PLANT} from '../../graphql/mutations/plant/waterPlant';
-import {PLANT_ICON} from '../../src/images';
+import {PLANT_ICON, WATER_ICON} from '../../src/images';
 
 const Plant = ({navigation, plant}) => {
     const [name, setName] = useState(plant.name);
@@ -41,7 +41,7 @@ const Plant = ({navigation, plant}) => {
 
     return (
         <Center style={styles.container}>
-            <View style={styles.plantNameContainer}>
+            <View style={styles.textIconContainer}>
                 <Image style={styles.icons} source={PLANT_ICON} />
                 <Text
                     style={{
@@ -52,24 +52,41 @@ const Plant = ({navigation, plant}) => {
                 </Text>
             </View>
             <View style={styles.sensorInfoContainer}>
-                <Text style={styles.sensorText}>
-                    Temperature: {lastSensorReadings.temperature}
-                </Text>
-                <Text style={styles.sensorText}>
-                    Humidity: {lastSensorReadings.humidity}
-                </Text>
-                <Text style={styles.sensorText}>
-                    Soil Moisture: {lastSensorReadings.soil_moisture}
-                </Text>
+                <View style={styles.SensorTextContainer}>
+                    <Text style={styles.sensorText}>
+                        Temperature: {lastSensorReadings.temperature}
+                    </Text>
+                    <Text style={styles.SensorTextUnit}>°F</Text>
+                </View>
+                <View style={styles.SensorTextContainer}>
+                    <Text style={styles.sensorText}>
+                        Humidity: {lastSensorReadings.humidity}
+                    </Text>
+                    <Text style={styles.SensorTextUnit}>%</Text>
+                </View>
+                <View style={styles.SensorTextContainer}>
+                    <Text style={styles.sensorText}>
+                        Soil Moisture: {lastSensorReadings.soil_moisture}
+                    </Text>
+                    <Text style={styles.SensorTextUnit}>/ 10</Text>
+                </View>
                 <Text style={styles.sensorText}>
                     Measured on: {lastSensorDate}
                 </Text>
             </View>
             <GraphData sensor_readings={plant.sensor_readings} />
-            <Text style={{color: colors.text, marginBottom: 10, fontSize: 20}}>
-                Last Watered: {lastWateredDate}
-            </Text>
-
+            <View style={styles.textIconContainer}>
+                <Image style={styles.icons} source={WATER_ICON} />
+                <Text
+                    style={{
+                        color: colors.text,
+                        marginBottom: 10,
+                        fontSize: 20,
+                    }}>
+                    {' '}
+                    Last Watered: {lastWateredDate}
+                </Text>
+            </View>
             <TouchableOpacity
                 style={styles.Button}
                 onPress={() =>
@@ -101,20 +118,28 @@ const styles = StyleSheet.create({
     },
     sensorInfoContainer: {
         marginTop: 10,
+        marginBottom: 100,
         borderColor: '#ffffff',
         height: 30,
     },
     sensorText: {
-        fontSize: 20,
+        fontSize: 25,
         color: '#ffffff',
     },
     icons: {
         width: 40,
         height: 40,
     },
-    plantNameContainer: {
+    textIconContainer: {
         flexDirection: 'row',
         marginTop: 10,
+    },
+    SensorTextContainer: {
+        flexDirection: 'row',
+    },
+    SensorTextUnit: {
+        fontSize: 27,
+        color: '#d3d3d3',
     },
 });
 
