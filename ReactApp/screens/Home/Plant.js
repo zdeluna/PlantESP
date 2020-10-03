@@ -15,6 +15,7 @@ import {useTheme} from '@react-navigation/native';
 import {useMutation} from '@apollo/react-hooks';
 import {WATER_PLANT} from '../../graphql/mutations/plant/waterPlant';
 import {PLANT_ICON, WATER_ICON} from '../../src/images';
+import {Icon} from '../../components/Icon.js';
 
 const Plant = ({navigation, plant}) => {
     const [name, setName] = useState(plant.name);
@@ -42,7 +43,7 @@ const Plant = ({navigation, plant}) => {
     return (
         <Center style={styles.container}>
             <View style={styles.textIconContainer}>
-                <Image style={styles.icons} source={PLANT_ICON} />
+                <Icon source={PLANT_ICON} />
                 <Text
                     style={{
                         color: colors.header,
@@ -76,7 +77,7 @@ const Plant = ({navigation, plant}) => {
             </View>
             <GraphData sensor_readings={plant.sensor_readings} />
             <View style={styles.textIconContainer}>
-                <Image style={styles.icons} source={WATER_ICON} />
+                <Icon source={WATER_ICON} />
                 <Text
                     style={{
                         color: colors.text,
@@ -125,10 +126,6 @@ const styles = StyleSheet.create({
     sensorText: {
         fontSize: 25,
         color: '#ffffff',
-    },
-    icons: {
-        width: 40,
-        height: 40,
     },
     textIconContainer: {
         flexDirection: 'row',
