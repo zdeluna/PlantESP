@@ -22,14 +22,14 @@ const Plant = ({navigation, plant}) => {
     const lastWateredDate = plant.water_datetimes
         ? moment(
               plant.water_datetimes[plant.water_datetimes.length - 1],
-          ).format('DD-MMM')
+          ).format('MMM-DD')
         : '';
 
     const lastSensorReadings =
         plant.sensor_readings[plant.sensor_readings.length - 1];
 
     const lastSensorDate = lastSensorReadings.datetime
-        ? moment(lastSensorReadings.datetime).format('DD-MMM')
+        ? moment(lastSensorReadings.datetime).format('MMM-DD')
         : '';
 
     console.log(lastSensorReadings);
