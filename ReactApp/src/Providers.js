@@ -8,6 +8,7 @@ import {setContext} from 'apollo-link-context';
 import {onError} from 'apollo-link-error';
 import {useMutation, ApolloProvider} from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
+import fetch from 'node-fetch';
 
 import {from} from 'apollo-boost';
 
@@ -20,6 +21,7 @@ const httpLink = createHttpLink({
         'client-name': 'Plant ESP [React App]',
         'client-version': '1.0.0',
     },
+    fetch: fetch
 });
 
 const errorLink = onError(({graphQLErrors, networkError}) => {
