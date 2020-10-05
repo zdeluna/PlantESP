@@ -43,6 +43,7 @@
         "@babel/core": "^7.6.2",
         "@babel/runtime": "^7.6.2",
         "@react-native-community/eslint-config": "^0.0.5",
+        "@testing-library/react-hooks": "^3.4.2",
         "babel-jest": "^24.9.0",
         "eslint": "^7.3.1",
         "eslint-config-airbnb": "^18.2.0",
