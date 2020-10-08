@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import {useState, useCallback} from 'react';
 
 const formData = values => {
     const [formValues, setFormValues] = useState({
@@ -12,7 +12,7 @@ const formData = values => {
         });
     };
 
-    return [formValues, handleFormValueChange, setFormValues];
+    return {formValues, handleFormValueChange};
 };
 
 export default formData;
