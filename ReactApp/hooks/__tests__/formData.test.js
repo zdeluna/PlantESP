@@ -1,6 +1,6 @@
 import React from 'react';
 import renderer from 'react-test-renderer';
-import formData from '../../components/FormData';
+import formData from '../formData';
 import {renderHook, act} from '@testing-library/react-hooks';
 
 describe('FormData', () => {

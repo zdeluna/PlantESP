@@ -1,14 +1,14 @@
 import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import FormField from '../../components/FormField';
-import formData from '../../components/FormData';
+import formData from '../../hooks/formData';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
 import {AuthContext} from '../../src/AuthProvider';
 
 const Login = ({navigation}) => {
-    const [formValues, handleFormValueChange, setFormValues] = formData({
+    const {formValues, handleFormValueChange, setFormValues} = formData({
         login: '',
         password: '',
     });

@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`FormField Text input is rendered 1`] = `
+<View
+  style={Object {}}
+>
+  <Text
+    style={
+      Object {
+        "fontSize": 20,
+        "marginBottom": 12,
+        "paddingLeft": 10,
+        "paddingTop": 10,
+      }
+    }
+  >
+    Email
+  </Text>
+  <TextInput
+    allowFontScaling={true}
+    onChange={[Function]}
+    placeholder="Your email."
+    rejectResponderTermination={true}
+    style={
+      Object {
+        "borderRadius": 15,
+        "borderWidth": 1,
+        "fontSize": 20,
+        "padding": 12,
+      }
+    }
+    underlineColorAndroid="transparent"
+  />
+</View>
+`;

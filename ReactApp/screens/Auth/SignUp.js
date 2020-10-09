@@ -1,7 +1,7 @@
 import React from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import FormField from '../../components/FormField';
-import formData from '../../components/FormData';
+import formData from '../../hooks/formData';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {CREATE_USER} from '../../graphql/mutations/user/createUser';
@@ -9,7 +9,7 @@ import {useMutation, useApolloClient} from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 
 const SignUp = ({navigation}) => {
-    const [formValues, handleFormValueChange, setFormValues] = formData({
+    const {formValues, handleFormValueChange, setFormValues} = formData({
         username: '',
         email: '',
         password: '',
