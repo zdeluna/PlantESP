@@ -3,6 +3,8 @@ import {Center} from '../../components/Center';
 import {Text, View, TouchableOpacity, Button, StyleSheet} from 'react-native';
 import Graph from './Graph';
 import moment from 'moment';
+import DropDownPicker from 'react-native-dropdown-picker';
+import Icon from 'react-native-vector-icons/Feather';
 
 const GraphData = props => {
     const filterData = data => {
@@ -83,6 +85,23 @@ const GraphData = props => {
                 </TouchableOpacity>
             </View>
             <View>
+                <DropDownPicker
+                    items={[
+                        {label: 'last day', value: 'last day'},
+                        {label: 'last week', value: 'last week'},
+                        {label: 'last month', value: 'last month'},
+                        {label: 'last year', value: 'last year'},
+                    ]}
+                    defaultValue={'last week'}
+                    containerStyle={{width: 100, height: 40}}
+                    style={{backgroundColor: '#fafafa'}}
+                    itemStyle={{justifiyContent: 'flex-start'}}
+                    dropDownStyle={{backgroundColor: '#fafafa'}}
+                    onChangeItem={item => {
+                        console.log(item);
+                    }}
+                />
+
                 <Graph
                     xAxis={xAxisData}
                     yAxis={yAxisData}

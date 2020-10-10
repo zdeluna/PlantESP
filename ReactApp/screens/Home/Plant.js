@@ -33,7 +33,6 @@ const Plant = ({navigation, plant}) => {
         ? moment(lastSensorReadings.datetime).format('MMM-DD')
         : '';
 
-    console.log(lastSensorReadings);
     const [waterPlant] = useMutation(WATER_PLANT, {
         onCompleted(response) {
             console.log(response);
