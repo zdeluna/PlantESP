@@ -7,15 +7,35 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
 
 const GraphData = props => {
-    const filterData = data => {
+    /*
+    const filterDataByCategory = data => {
+        console.log(data);
+
         const timeData = data.map(datum => {
             return moment(datum.datetime).format('DD-MMM');
         });
+
         const temperatureData = data.map(datum => datum.temperature);
         const humidityData = data.map(datum => datum.humidity);
         const soilMoistureData = data.map(datum => datum.soil_moisture);
 
         return {timeData, temperatureData, humidityData, soilMoistureData};
+    };
+    */
+    const filterDataByTimeFrame = (data, timeFrame) => {
+        let originalData = data;
+        let currentDate = moment();
+        return originalData.filter(sensorReading =>
+            moment(sensorReading.datetime).isSame(currentDate, timeFrame),
+        );
+    };
+
+    const lastDayData = filterDataByTimeFrame(props.sensor_readings, 'day');
+    const lastWeekData = filterDataByTimeFrame(props.sensor_readings, 'week');
+    const lastMonthData = filterDataByTimeFrame(props.sensor_readings, 'month');
+
+    const filterDataByCategory = (data, category) => {
+        return data.map(datum => datum[category]);
     };
 
     const {
@@ -23,13 +43,18 @@ const GraphData = props => {
         temperatureData,
         humidityData,
         soilMoistureData,
-    } = filterData(props.sensor_readings);
+    } = filterDataByCategory(props.sensor_readings);
 
-    const [categorySelected, setCategorySelected] = useState('Temperature');
+    const [categorySelected, setCategorySelected] = useState('temperature');
 
-    const [xAxisData, setXAxisData] = useState(timeData);
-    const [yAxisData, setYAxisData] = useState(temperatureData);
+    const [xAxisData, setXAxisData] = useState(
+        filterDataByCategory(lastWeekData, 'datetime'),
+    );
+    const [yAxisData, setYAxisData] = useState(
+        filterDataByCategory(lastWeekData, 'temperature'),
+    );
     const [yAxisUnits, setYAxisUnits] = useState('°');
+    const [timeFrame, setTimeFrame] = useState('week');
 
     return (
         <Center>
@@ -39,7 +64,7 @@ const GraphData = props => {
                     onPress={() => {
                         setYAxisData(temperatureData);
                         setYAxisUnits('°');
-                        setCategorySelected('Temperature');
+                        setCategorySelected('temperature');
                     }}>
                     <Text
                         style={
@@ -55,11 +80,11 @@ const GraphData = props => {
                     onPress={() => {
                         setYAxisData(humidityData);
                         setYAxisUnits('%');
-                        setCategorySelected('Humidity');
+                        setCategorySelected('humidity');
                     }}>
                     <Text
                         style={
-                            categorySelected == 'Humidity'
+                            categorySelected == 'humidity'
                                 ? styles.categoryTextSelected
                                 : styles.categoryTextUnSelected
                         }>
@@ -72,11 +97,11 @@ const GraphData = props => {
                     onPress={() => {
                         setYAxisData(soilMoistureData);
                         setYAxisUnits('%');
-                        setCategorySelected('Soil Moisture');
+                        setCategorySelected('soil_moisture');
                     }}>
                     <Text
                         style={
-                            categorySelected == 'Soil'
+                            categorySelected == 'soil_moisture'
                                 ? styles.categoryTextSelected
                                 : styles.categoryTextUnSelected
                         }>
@@ -87,10 +112,9 @@ const GraphData = props => {
             <View>
                 <DropDownPicker
                     items={[
-                        {label: 'last day', value: 'last day'},
-                        {label: 'last week', value: 'last week'},
-                        {label: 'last month', value: 'last month'},
-                        {label: 'last year', value: 'last year'},
+                        {label: 'last day', value: 'day'},
+                        {label: 'last week', value: 'week'},
+                        {label: 'last month', value: 'month'},
                     ]}
                     defaultValue={'last week'}
                     containerStyle={{width: 100, height: 40}}
@@ -98,7 +122,53 @@ const GraphData = props => {
                     itemStyle={{justifiyContent: 'flex-start'}}
                     dropDownStyle={{backgroundColor: '#fafafa'}}
                     onChangeItem={item => {
-                        console.log(item);
+                        setTimeFrame(item.value);
+
+                        switch (item.value) {
+                            case 'day':
+                                console.log('set day');
+                                setXAxisData(
+                                    filterDataByCategory(
+                                        lastDayData,
+                                        'datetime',
+                                    ),
+                                );
+                                setYAxisData(
+                                    filterDataByCategory(
+                                        lastDayData,
+                                        categorySelected,
+                                    ),
+                                );
+                                break;
+                            case 'week':
+                                setXAxisData(
+                                    filterDataByCategory(
+                                        lastWeekData,
+                                        'datetime',
+                                    ),
+                                );
+                                setYAxisData(
+                                    filterDataByCategory(
+                                        lastWeekData,
+                                        categorySelected,
+                                    ),
+                                );
+                                break;
+                            case 'month':
+                                setXAxisData(
+                                    filterDataByCategory(
+                                        lastMonthData,
+                                        'datetime',
+                                    ),
+                                );
+                                setYAxisData(
+                                    filterDataByCategory(
+                                        lastMonthData,
+                                        categorySelected,
+                                    ),
+                                );
+                                break;
+                        }
                     }}
                 />
 
