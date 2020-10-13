@@ -7,21 +7,6 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
 
 const GraphData = props => {
-    /*
-    const filterDataByCategory = data => {
-        console.log(data);
-
-        const timeData = data.map(datum => {
-            return moment(datum.datetime).format('DD-MMM');
-        });
-
-        const temperatureData = data.map(datum => datum.temperature);
-        const humidityData = data.map(datum => datum.humidity);
-        const soilMoistureData = data.map(datum => datum.soil_moisture);
-
-        return {timeData, temperatureData, humidityData, soilMoistureData};
-    };
-    */
     const filterDataByTimeFrame = (data, timeFrame) => {
         let originalData = data;
         let currentDate = moment();
@@ -30,9 +15,23 @@ const GraphData = props => {
         );
     };
 
-    const lastDayData = filterDataByTimeFrame(props.sensor_readings, 'day');
-    const lastWeekData = filterDataByTimeFrame(props.sensor_readings, 'week');
-    const lastMonthData = filterDataByTimeFrame(props.sensor_readings, 'month');
+    const changeDateTimeFormat = (data, format) => {
+        const formattedData = data.map(datum => ({
+            ...datum,
+            datetime: moment(datum.datetime).format(format),
+        }));
+
+        return formattedData;
+    };
+
+    let lastDayData = filterDataByTimeFrame(props.sensor_readings, 'day');
+
+    let lastWeekData = changeDateTimeFormat(
+        filterDataByTimeFrame(props.sensor_readings, 'week'),
+        'DD-MMM',
+    );
+    console.log(lastWeekData);
+    let lastMonthData = filterDataByTimeFrame(props.sensor_readings, 'month');
 
     const filterDataByCategory = (data, category) => {
         return data.map(datum => datum[category]);
@@ -116,7 +115,7 @@ const GraphData = props => {
                         {label: 'last week', value: 'week'},
                         {label: 'last month', value: 'month'},
                     ]}
-                    defaultValue={'last week'}
+                    defaultValue={'week'}
                     containerStyle={{width: 100, height: 40}}
                     style={{backgroundColor: '#fafafa'}}
                     itemStyle={{justifiyContent: 'flex-start'}}

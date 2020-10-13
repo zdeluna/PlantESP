@@ -1,14 +1,7 @@
 import React, {useState} from 'react';
 import {Center} from '../../components/Center';
 import {Dimensions, Text, View} from 'react-native';
-import {
-    LineChart,
-    BarChart,
-    PieChart,
-    ProgressChart,
-    ContributionGraph,
-    StackedBarChart,
-} from 'react-native-chart-kit';
+import {LineChart} from 'react-native-chart-kit';
 
 const Graph = ({xAxis, yAxis, yAxisUnits}) => {
     return (
