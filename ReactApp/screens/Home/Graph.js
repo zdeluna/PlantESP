@@ -42,6 +42,7 @@ const Graph = ({xAxis, yAxis, yAxisUnits}) => {
                     marginVertical: 8,
                     borderRadius: 16,
                 }}
+                segments={4}
             />
         </View>
     );

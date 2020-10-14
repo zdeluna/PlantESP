@@ -30,19 +30,21 @@ const GraphData = props => {
         filterDataByTimeFrame(props.sensor_readings, 'week'),
         'DD-MMM',
     );
-    console.log(lastWeekData);
-    let lastMonthData = filterDataByTimeFrame(props.sensor_readings, 'month');
+
+    let lastMonthData = changeDateTimeFormat(
+        filterDataByTimeFrame(props.sensor_readings, 'month'),
+        'DD-MMM',
+    );
+
+    const sensorData = {
+        day: lastDayData,
+        week: lastWeekData,
+        month: lastMonthData,
+    };
 
     const filterDataByCategory = (data, category) => {
         return data.map(datum => datum[category]);
     };
-
-    const {
-        timeData,
-        temperatureData,
-        humidityData,
-        soilMoistureData,
-    } = filterDataByCategory(props.sensor_readings);
 
     const [categorySelected, setCategorySelected] = useState('temperature');
 
@@ -61,13 +63,18 @@ const GraphData = props => {
                 <TouchableOpacity
                     style={styles.categoryButton}
                     onPress={() => {
-                        setYAxisData(temperatureData);
+                        setYAxisData(
+                            filterDataByCategory(
+                                sensorData[timeFrame],
+                                'temperature',
+                            ),
+                        );
                         setYAxisUnits('°');
                         setCategorySelected('temperature');
                     }}>
                     <Text
                         style={
-                            categorySelected == 'Temperature'
+                            categorySelected == 'temperature'
                                 ? styles.categoryTextSelected
                                 : styles.categoryTextUnSelected
                         }>
@@ -77,7 +84,12 @@ const GraphData = props => {
                 <TouchableOpacity
                     style={styles.categoryButton}
                     onPress={() => {
-                        setYAxisData(humidityData);
+                        setYAxisData(
+                            filterDataByCategory(
+                                sensorData[timeFrame],
+                                'humidity',
+                            ),
+                        );
                         setYAxisUnits('%');
                         setCategorySelected('humidity');
                     }}>
@@ -94,8 +106,13 @@ const GraphData = props => {
                 <TouchableOpacity
                     style={styles.categoryButton}
                     onPress={() => {
-                        setYAxisData(soilMoistureData);
-                        setYAxisUnits('%');
+                        setYAxisData(
+                            filterDataByCategory(
+                                sensorData[timeFrame],
+                                'soil_moisture',
+                            ),
+                        );
+                        setYAxisUnits('/10');
                         setCategorySelected('soil_moisture');
                     }}>
                     <Text
