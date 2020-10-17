@@ -20,6 +20,7 @@ const Graph = ({xAxis, yAxis, yAxisUnits}) => {
                 yAxisLabel=""
                 yAxisSuffix={yAxisUnits}
                 yAxisInterval={1} // optional, defaults to 1
+                verticalLabelRotation={20}
                 chartConfig={{
                     backgroundColor: '#d3d3d3',
                     backgroundGradientFrom: '#0B2B36',

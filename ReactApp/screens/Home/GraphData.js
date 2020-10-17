@@ -24,17 +24,75 @@ const GraphData = props => {
         return formattedData;
     };
 
+    const groupBy = (array, key) => {
+        return array.reduce((result, currentValue) => {
+            if (result[currentValue[key]]) {
+                result[currentValue[key]].push(currentValue);
+            } else {
+                result[currentValue[key]] = [];
+                result[currentValue[key]].push(currentValue);
+            }
+            return result;
+        }, {});
+    };
+
+    const averageMeasurements = groupedData => {
+        let array = [];
+
+        Object.keys(groupedData).forEach(measurementType => {
+            // If two measurements happen in a single day, find the average of the measurements
+            let measurement = calculateAverageMeasurement(
+                groupedData[measurementType],
+            );
+            array.push(measurement);
+        });
+
+        return array;
+    };
+
+    const calculateAverageMeasurement = array => {
+        let numberOfMeasurements = array.length;
+        let sumTemperatures = (sumHumidities = sumSoilMoistures = 0);
+
+        array.forEach(measurement => {
+            sumTemperatures += measurement.temperature;
+            sumHumidities += measurement.humidity;
+            sumSoilMoistures += measurement.soil_moisture;
+        });
+
+        let averageTemperature = sumTemperatures / numberOfMeasurements;
+        let averageHumidity = sumHumidities / numberOfMeasurements;
+        let averageSoilMoisture = sumSoilMoistures / numberOfMeasurements;
+
+        return {
+            temperature: averageTemperature,
+            humidity: averageHumidity,
+            soil_moisture: averageSoilMoisture,
+            datetime: array[0].datetime,
+        };
+    };
+
+    const aggregateData = timeFrame => {
+        let data = changeDateTimeFormat(
+            filterDataByTimeFrame(props.sensor_readings, timeFrame),
+            'DD-MMM',
+        );
+
+        // Go through each sensor reading and group the ones that have the same date;
+        let groupedData = groupBy(data, 'datetime');
+        console.log('grouped Data');
+        console.log(groupedData);
+        return averageMeasurements(groupedData);
+    };
+
     let lastDayData = filterDataByTimeFrame(props.sensor_readings, 'day');
+    let lastWeekData = aggregateData('week');
+    let lastMonthData = aggregateData('month');
 
-    let lastWeekData = changeDateTimeFormat(
-        filterDataByTimeFrame(props.sensor_readings, 'week'),
-        'DD-MMM',
-    );
-
-    let lastMonthData = changeDateTimeFormat(
-        filterDataByTimeFrame(props.sensor_readings, 'month'),
-        'DD-MMM',
-    );
+    console.log('last week data');
+    console.log(lastWeekData);
+    console.log('last month data');
+    console.log(lastMonthData);
 
     const sensorData = {
         day: lastDayData,
@@ -135,7 +193,7 @@ const GraphData = props => {
                     defaultValue={'week'}
                     containerStyle={{width: 100, height: 40}}
                     style={{backgroundColor: '#fafafa'}}
-                    itemStyle={{justifiyContent: 'flex-start'}}
+                    itemStyle={{justifyContent: 'flex-start'}}
                     dropDownStyle={{backgroundColor: '#fafafa'}}
                     onChangeItem={item => {
                         setTimeFrame(item.value);
