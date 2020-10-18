@@ -80,8 +80,6 @@ const GraphData = props => {
 
         // Go through each sensor reading and group the ones that have the same date;
         let groupedData = groupBy(data, 'datetime');
-        console.log('grouped Data');
-        console.log(groupedData);
         return averageMeasurements(groupedData);
     };
 
@@ -114,6 +112,18 @@ const GraphData = props => {
     );
     const [yAxisUnits, setYAxisUnits] = useState('°');
     const [timeFrame, setTimeFrame] = useState('week');
+
+    function ShowGraph() {
+        if (xAxisData && yAxisData.length) {
+            return (
+                <Graph
+                    xAxis={xAxisData}
+                    yAxis={yAxisData}
+                    yAxisUnits={yAxisUnits}
+                />
+            );
+        } else return null;
+    }
 
     return (
         <Center>
@@ -245,12 +255,7 @@ const GraphData = props => {
                         }
                     }}
                 />
-
-                <Graph
-                    xAxis={xAxisData}
-                    yAxis={yAxisData}
-                    yAxisUnits={yAxisUnits}
-                />
+                <ShowGraph />
             </View>
         </Center>
     );
