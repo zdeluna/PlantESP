@@ -5,6 +5,8 @@ import Graph from './Graph';
 import moment from 'moment';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
+import EmptyGraph from '../../components/EmptyGraph';
+import {useTheme} from '@react-navigation/native';
 
 const GraphData = props => {
     const filterDataByTimeFrame = (data, timeFrame) => {
@@ -14,6 +16,8 @@ const GraphData = props => {
             moment(sensorReading.datetime).isSame(currentDate, timeFrame),
         );
     };
+
+    const {colors} = useTheme();
 
     const changeDateTimeFormat = (data, format) => {
         const formattedData = data.map(datum => ({
@@ -114,7 +118,7 @@ const GraphData = props => {
     const [timeFrame, setTimeFrame] = useState('week');
 
     function ShowGraph() {
-        if (xAxisData && yAxisData.length) {
+        if (xAxisData && xAxisData.length) {
             return (
                 <Graph
                     xAxis={xAxisData}
@@ -122,7 +126,7 @@ const GraphData = props => {
                     yAxisUnits={yAxisUnits}
                 />
             );
-        } else return null;
+        } else return <EmptyGraph />;
     }
 
     return (
@@ -201,10 +205,20 @@ const GraphData = props => {
                         {label: 'last month', value: 'month'},
                     ]}
                     defaultValue={'week'}
-                    containerStyle={{width: 100, height: 40}}
-                    style={{backgroundColor: '#fafafa'}}
+                    containerStyle={{width: 120, height: 40}}
+                    style={{
+                        backgroundColor: colors.background,
+                        borderWidth: 2,
+                    }}
                     itemStyle={{justifyContent: 'flex-start'}}
-                    dropDownStyle={{backgroundColor: '#fafafa'}}
+                    dropDownStyle={{
+                        backgroundColor: colors.background,
+                        borderWidth: 2,
+                    }}
+                    labelStyle={{
+                        color: colors.text,
+                    }}
+                    arrowColor={colors.text}
                     onChangeItem={item => {
                         setTimeFrame(item.value);
 
