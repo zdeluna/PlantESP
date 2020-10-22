@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {Center} from '../../components/Center';
 import {Dimensions, Text, View} from 'react-native';
 import {LineChart} from 'react-native-chart-kit';
+import {useTheme} from '@react-navigation/native';
 
 const Graph = ({xAxis, yAxis, yAxisUnits}) => {
     return (

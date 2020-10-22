@@ -83,7 +83,8 @@ const getPlant = async ({ id }) => {
         const sensorReadings = await SensorReading.findAll({
             where: {
                 plantId: id
-            }
+            },
+            order: [["datetime", "ASC"]]
         });
 
         plant.sensor_readings = sensorReadings;
