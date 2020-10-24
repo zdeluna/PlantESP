@@ -6,8 +6,6 @@ import Loading from '../../components/Loading';
 
 const PlantData = ({navigation, route}) => {
     const [plant, setPlant] = useState();
-    console.log('in plant data');
-    console.log(route.params.id);
     const {data, loading, error} = useQuery(GET_PLANT, {
         variables: {id: route.params.id},
     });

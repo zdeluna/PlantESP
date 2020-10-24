@@ -7,6 +7,11 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import EmptyGraph from '../../components/EmptyGraph';
 import {useTheme} from '@react-navigation/native';
+import {
+    groupBy,
+    averageMeasurements,
+    changeDateTimeFormat,
+} from '../../utils/GraphUtils';
 
 const GraphData = props => {
     const filterDataByTimeFrame = (data, timeFrame) => {
@@ -18,63 +23,6 @@ const GraphData = props => {
     };
 
     const {colors} = useTheme();
-
-    const changeDateTimeFormat = (data, format) => {
-        const formattedData = data.map(datum => ({
-            ...datum,
-            datetime: moment(datum.datetime).format(format),
-        }));
-
-        return formattedData;
-    };
-
-    const groupBy = (array, key) => {
-        return array.reduce((result, currentValue) => {
-            if (result[currentValue[key]]) {
-                result[currentValue[key]].push(currentValue);
-            } else {
-                result[currentValue[key]] = [];
-                result[currentValue[key]].push(currentValue);
-            }
-            return result;
-        }, {});
-    };
-
-    const averageMeasurements = groupedData => {
-        let array = [];
-
-        Object.keys(groupedData).forEach(measurementType => {
-            // If two measurements happen in a single day, find the average of the measurements
-            let measurement = calculateAverageMeasurement(
-                groupedData[measurementType],
-            );
-            array.push(measurement);
-        });
-
-        return array;
-    };
-
-    const calculateAverageMeasurement = array => {
-        let numberOfMeasurements = array.length;
-        let sumTemperatures = (sumHumidities = sumSoilMoistures = 0);
-
-        array.forEach(measurement => {
-            sumTemperatures += measurement.temperature;
-            sumHumidities += measurement.humidity;
-            sumSoilMoistures += measurement.soil_moisture;
-        });
-
-        let averageTemperature = sumTemperatures / numberOfMeasurements;
-        let averageHumidity = sumHumidities / numberOfMeasurements;
-        let averageSoilMoisture = sumSoilMoistures / numberOfMeasurements;
-
-        return {
-            temperature: averageTemperature,
-            humidity: averageHumidity,
-            soil_moisture: averageSoilMoisture,
-            datetime: array[0].datetime,
-        };
-    };
 
     const aggregateData = timeFrame => {
         let data = changeDateTimeFormat(
@@ -90,11 +38,6 @@ const GraphData = props => {
     let lastDayData = filterDataByTimeFrame(props.sensor_readings, 'day');
     let lastWeekData = aggregateData('week');
     let lastMonthData = aggregateData('month');
-
-    console.log('last week data');
-    console.log(lastWeekData);
-    console.log('last month data');
-    console.log(lastMonthData);
 
     const sensorData = {
         day: lastDayData,
@@ -205,7 +148,7 @@ const GraphData = props => {
                         {label: 'last month', value: 'month'},
                     ]}
                     defaultValue={'week'}
-                    containerStyle={{width: 120, height: 40}}
+                    containerStyle={{width: 120, height: 40, marginLeft: 10}}
                     style={{
                         backgroundColor: colors.background,
                         borderWidth: 2,
