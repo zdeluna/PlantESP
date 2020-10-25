@@ -46,7 +46,7 @@ export const averageMeasurements = groupedData => {
 };
 
 /**
- * Calculate the average of multiple sensor readings and return a single object * containing the average
+ * Calculate the average of multiple sensor readings and return a single object containing the average
  * @param {Array} array
  * @Return {Object} - Object with average temperature, humidity, and soil moist * ure readings
  *  */
@@ -72,6 +72,13 @@ export const calculateAverageMeasurement = array => {
         datetime: array[0].datetime,
     };
 };
+
+/**
+ * Change the datetime format of all sensor readings using moment.js
+ * @param {Array} array - Sensor readings
+ * @param {String} format - format of date such as "MMM-DD"
+ * @Return {Array} array - Sensor readings with formatted date
+ *  */
 
 export const changeDateTimeFormat = (data, format) => {
     const formattedData = data.map(datum => ({

@@ -8,7 +8,7 @@ import {
     changeDateTimeFormat,
 } from '../GraphUtils';
 
-describe('Graph Data', () => {
+describe('Graph Data Functions', () => {
     let testPlantData = [
         {datetime: '10-21', humidity: 30, temperature: 100},
         {datetime: '10-21', humidity: 40, temperature: 80},
@@ -17,7 +17,6 @@ describe('Graph Data', () => {
 
     it('groupBy function groups data by attribute', () => {
         let groupedData = groupBy(testPlantData, 'datetime');
-        console.log(groupedData);
         expect(groupedData['10-21'].length).toBe(2);
         expect(groupedData['10-22'].length).toBe(1);
     });
@@ -79,5 +78,18 @@ describe('Graph Data', () => {
         ];
 
         expect(aggregateData).toEqual(correctAggreateData);
+    });
+    it('Change the way dates are formatted in sensor measurements', () => {
+        testPlantData = [
+            {
+                temperature: 90,
+                humidity: 35,
+                soil_moisture: 5,
+                datetime: '2020-10-19T20:14:30Z',
+            },
+        ];
+
+        let formattedData = changeDateTimeFormat(testPlantData, 'MMM-DD');
+        expect(formattedData[0].datetime).toEqual('Oct-19');
     });
 });
