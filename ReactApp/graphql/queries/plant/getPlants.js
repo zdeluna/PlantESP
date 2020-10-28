@@ -5,6 +5,7 @@ export const GET_PLANTS = gql`
         plants {
             name
             id
+            water_datetimes
         }
     }
 `;

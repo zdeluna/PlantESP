@@ -24,8 +24,19 @@ const PlantList = ({navigation}) => {
     const {data, loading, error} = useQuery(GET_PLANTS);
 
     useEffect(() => {
-        if (data && data.plants) setPlants(data.plants);
-    });
+        if (data && data.plants) {
+            // Add the last water date to each plant object
+            let updatedPlants = data.plants.map(plant => {
+                if (plant.water_datetimes) {
+                    return {...plant, lastWatered: '10-22'};
+                }
+                return {...plant, lastWatered: ''};
+            });
+            console.log('update ');
+            console.log(updatedPlants);
+            setPlants(updatedPlants);
+        }
+    }, [data]);
 
     return (
         <Center>
@@ -37,6 +48,7 @@ const PlantList = ({navigation}) => {
                         navigation={navigation}
                         title={item.name}
                         id={item.id}
+                        description={'Last Watered: ' + item.lastWatered}
                     />
                 )}
                 numColumns={2}

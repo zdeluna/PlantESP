@@ -32,10 +32,6 @@ const styles = StyleSheet.create({
         marginBottom: 20,
         backgroundColor: '#333333',
     },
-    Icon: {
-        width: 40,
-        height: 40,
-    },
     title: {
         color: '#FFFFFF',
         fontSize: 18,
