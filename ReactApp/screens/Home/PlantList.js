@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import {GET_PLANTS} from '../../graphql/queries/plant/getPlants';
 import {Center} from '../../components/Center';
+import GridCell from '../../components/GridCell';
 import Plant from './Plant';
 import {useQuery} from '@apollo/react-hooks';
-import {FlatList} from 'react-native';
+import {FlatList, Text} from 'react-native';
 import PlantData from './PlantData';
 import {Button} from 'react-native';
 
@@ -32,12 +33,13 @@ const PlantList = ({navigation}) => {
                 data={plants}
                 keyExtractor={item => item.id}
                 renderItem={({item}) => (
-                    <PlantItem
+                    <GridCell
                         navigation={navigation}
-                        name={item.name}
+                        title={item.name}
                         id={item.id}
                     />
                 )}
+                numColumns={2}
             />
         </Center>
     );
