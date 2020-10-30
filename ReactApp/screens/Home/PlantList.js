@@ -7,6 +7,7 @@ import {useQuery} from '@apollo/react-hooks';
 import {FlatList, Text} from 'react-native';
 import PlantData from './PlantData';
 import {Button} from 'react-native';
+import moment from 'moment';
 
 const PlantItem = ({navigation, id, name}) => {
     return (
@@ -27,8 +28,16 @@ const PlantList = ({navigation}) => {
         if (data && data.plants) {
             // Add the last water date to each plant object
             let updatedPlants = data.plants.map(plant => {
+                const lastWateredDate = plant.water_datetimes.length
+                    ? moment(
+                          plant.water_datetimes[
+                              plant.water_datetimes.length - 1
+                          ],
+                      ).format('MMM-DD')
+                    : '';
+
                 if (plant.water_datetimes) {
-                    return {...plant, lastWatered: '10-22'};
+                    return {...plant, lastWatered: lastWateredDate};
                 }
                 return {...plant, lastWatered: ''};
             });

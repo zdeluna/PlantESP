@@ -43,14 +43,14 @@ const createSensorReading = async ({
 const waterPlant = async ({ id }) => {
     try {
         const datetime = new Date();
-
+        /*
         const response = await fetch(process.env.AWS_IOT_ENDPOINT, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
             },
             body: JSON.stringify({ command: "water", id, datetime })
-        });
+        });*/
 
         const { WaterDateTime } = await connectToDatabase();
 
@@ -130,14 +130,28 @@ const updatePlant = async updatedFields => {
 
 const getPlants = async userId => {
     try {
-        const { Plant } = await connectToDatabase();
+        const { Plant, WaterDateTime } = await connectToDatabase();
         const plants = await Plant.findAll({
             where: {
                 userId: userId
-            }
+            },
+            include: { model: WaterDateTime, as: "water_datetimes" }
         });
+
+        // Convert the array of waterdate objects to array of dates
+        if (plants) {
+            plants.forEach(plant => {
+                let dates = plant.water_datetimes.map(dates => {
+                    return dates.datetime;
+                });
+                plant.water_datetimes = dates;
+            });
+        }
+
         return plants;
-    } catch (error) {}
+    } catch (error) {
+        console.log(error);
+    }
 };
 
 /**

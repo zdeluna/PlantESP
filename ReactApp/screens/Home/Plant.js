@@ -18,14 +18,17 @@ import {PLANT_ICON, WATER_ICON} from '../../src/images';
 import {Icon} from '../../components/Icon.js';
 
 const Plant = ({navigation, plant}) => {
+    console.log('plant data');
+    console.log(plant);
     const [name, setName] = useState(plant.name);
     const {colors} = useTheme();
-    const lastWateredDate = plant.water_datetimes
+    const lastWateredDate = plant.water_datetimes.length
         ? moment(
               plant.water_datetimes[plant.water_datetimes.length - 1],
           ).format('MMM-DD')
         : '';
 
+    console.log(lastWateredDate);
     const lastSensorReadings =
         plant.sensor_readings[plant.sensor_readings.length - 1];
 

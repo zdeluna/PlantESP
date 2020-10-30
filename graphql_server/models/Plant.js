@@ -22,7 +22,7 @@ module.exports = (sequelize, type) => {
     Plant.associate = models => {
         Plant.belongsTo(models.User);
         Plant.hasMany(models.SensorReading);
-        Plant.hasMany(models.WaterDateTime);
+        Plant.hasMany(models.WaterDateTime, { as: "water_datetimes" });
     };
 
     return Plant;

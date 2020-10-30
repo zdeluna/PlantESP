@@ -31,6 +31,10 @@ const schema = gql`
         token: String!
     }
 
+    type WaterDateTime {
+        datetime: DateTime
+    }
+
     type SensorReading {
         datetime: DateTime
         temperature: Int
