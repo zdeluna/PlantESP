@@ -30,11 +30,13 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         marginRight: 20,
         marginBottom: 20,
-        backgroundColor: '#333333',
+        backgroundColor: '#808080',
     },
     title: {
         color: '#FFFFFF',
         fontSize: 18,
+        marginBottom: 15,
+        fontWeight: 'bold',
     },
     description: {
         color: '#FFFFFF',
