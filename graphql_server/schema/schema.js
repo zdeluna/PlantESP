@@ -47,6 +47,11 @@ const schema = gql`
         id: ID!
     }
 
+    type DeletePlantResponse {
+        success: Boolean!
+        id: ID!
+    }
+
     type CreateSensorReadingResponse {
         success: Boolean!
     }
@@ -74,6 +79,7 @@ const schema = gql`
         signInUser(login: String!, password: String!): Token!
         waterPlant(id: ID!): WaterPlantResponse
         createPlant(name: String!): CreatePlantResponse
+        deletePlant(id: ID!): DeletePlantResponse
         updatePlant(
             id: ID!
             name: String

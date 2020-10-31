@@ -158,7 +158,7 @@ const getPlants = async userId => {
  * Create a new plant
  * @param {String} - Name - name of plant
  * @param {Number} - userId
- * @Return {Promise} - Array of User's Plants
+ * @Return {Object} - Reponse object
  */
 
 const createPlant = async ({ name }, { userId }) => {
@@ -168,6 +168,28 @@ const createPlant = async ({ name }, { userId }) => {
         return {
             success: true,
             id: plant.id
+        };
+    } catch (error) {}
+};
+
+/**
+ * Delete a plant
+ * @param {String} - id - id of the plant that is to be deleted
+ * @param {Number} - userId
+ * @Return {Object} - response object
+ */
+
+const deletePlant = async ({ id }, { userId }) => {
+    try {
+        const { Plant } = await connectToDatabase();
+        const plant = await Plant.destroy({
+            where: {
+                id: id
+            }
+        });
+        return {
+            success: true,
+            id: id
         };
     } catch (error) {}
 };
@@ -244,6 +266,9 @@ export default {
     Mutation: {
         createPlant: (root, { name }, { userId }) => {
             return createPlant({ name }, { userId });
+        },
+        deletePlant: (root, { id }, { userId }) => {
+            return deletePlant({ id }, { userId });
         },
         updatePlant: (root, updatedFields) => {
             return updatePlant(updatedFields);

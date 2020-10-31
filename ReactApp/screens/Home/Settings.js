@@ -6,6 +6,7 @@ import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import {UPDATE_PLANT} from '../../graphql/mutations/plant/updatePlant';
 import {useMutation} from '@apollo/react-hooks';
+import {DELETE_PLANT} from '../../graphql/mutations/plant/deletePlant';
 
 const Settings = ({navigation, route}) => {
     const {colors} = useTheme();
@@ -18,6 +19,13 @@ const Settings = ({navigation, route}) => {
         onCompleted(response) {
             console.log(response);
             navigation.navigate('PlantData', {id: route.params.id});
+        },
+    });
+
+    const [deletePlant] = useMutation(DELETE_PLANT, {
+        onCompleted(response) {
+            console.log(response);
+            navigation.navigate('PlantList');
         },
     });
 
