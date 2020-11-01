@@ -1,15 +1,19 @@
 import React, {useState} from 'react';
-import {Text, View, Button, StyleSheet} from 'react-native';
+import {Text, View, Button, TouchableOpacity, StyleSheet} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {Center} from '../../components/Center';
 import DropDownPicker from 'react-native-dropdown-picker';
 import Icon from 'react-native-vector-icons/Feather';
 import {UPDATE_PLANT} from '../../graphql/mutations/plant/updatePlant';
+import {GET_PLANTS} from '../../graphql/queries/plant/getPlants';
 import {useMutation} from '@apollo/react-hooks';
 import {DELETE_PLANT} from '../../graphql/mutations/plant/deletePlant';
+import {useApolloClient} from '@apollo/react-hooks';
 
 const Settings = ({navigation, route}) => {
     const {colors} = useTheme();
+    const client = useApolloClient();
+
     const [sensorFrequency, setSensorFrequency] = useState(
         route.params.sensorFrequency,
     );
@@ -17,22 +21,28 @@ const Settings = ({navigation, route}) => {
 
     const [updatePlant] = useMutation(UPDATE_PLANT, {
         onCompleted(response) {
-            console.log(response);
             navigation.navigate('PlantData', {id: route.params.id});
         },
     });
 
     const [deletePlant] = useMutation(DELETE_PLANT, {
         onCompleted(response) {
-            console.log(response);
+            // Remove the recently deleted plant from the apollo cache.
+            const data = client.readQuery({query: GET_PLANTS});
+            client.writeQuery({
+                query: GET_PLANTS,
+                data: {
+                    plants: data.plants.filter(
+                        plant => plant.id != route.params.id,
+                    ),
+                },
+            });
+
             navigation.navigate('PlantList');
         },
     });
 
     const saveSettings = sensorFrequency => {
-        console.log('Save settings');
-        console.log(sensorFrequency);
-
         updatePlant({
             variables: {
                 id: route.params.id,
@@ -47,7 +57,6 @@ const Settings = ({navigation, route}) => {
             <Text style={{color: colors.text, fontSize: 20, paddingBottom: 20}}>
                 Settings:
             </Text>
-
             <View style={styles.SettingContainer}>
                 <Text
                     style={{
@@ -136,12 +145,20 @@ const Settings = ({navigation, route}) => {
                     onChangeItem={item => setWateringTime(item.value)}
                 />
             </View>
+            <TouchableOpacity onPress={() => saveSettings(sensorFrequency)}>
+                <Text style={styles.saveButtonText}>Save</Text>
+            </TouchableOpacity>
 
-            <Button
-                style={styles.Button}
-                title="Save"
-                onPress={() => saveSettings(sensorFrequency)}
-            />
+            <TouchableOpacity
+                onPress={() =>
+                    deletePlant({
+                        variables: {
+                            id: route.params.id,
+                        },
+                    })
+                }>
+                <Text style={styles.deleteButtonText}>Delete Plant</Text>
+            </TouchableOpacity>
         </Center>
     );
 };
@@ -150,17 +167,21 @@ const styles = StyleSheet.create({
     container: {
         display: 'flex',
     },
-    Button: {
-        fontSize: 20,
-        paddingTop: 50,
-        backgroundColor: '#fafafa',
-    },
     SettingContainer: {
         borderColor: '#ffffff',
         borderWidth: 2,
         width: 300,
         padding: 20,
         margin: 20,
+    },
+    saveButtonText: {
+        color: '#1378F6',
+        fontSize: 24,
+    },
+    deleteButtonText: {
+        color: 'red',
+        fontSize: 24,
+        marginTop: 80,
     },
 });
 

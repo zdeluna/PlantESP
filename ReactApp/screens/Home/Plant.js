@@ -28,10 +28,19 @@ const Plant = ({navigation, plant}) => {
           ).format('MMM-DD')
         : '';
 
-    console.log(lastWateredDate);
-    const lastSensorReadings =
+    let lastSensorReadings =
         plant.sensor_readings[plant.sensor_readings.length - 1];
 
+    if (!lastSensorReadings) {
+        lastSensorReadings = {
+            temperature: '',
+            humidity: '',
+            soil_moisture: '',
+            datetime: '',
+        };
+    }
+
+    console.log(lastSensorReadings);
     const lastSensorDate = lastSensorReadings.datetime
         ? moment(lastSensorReadings.datetime).format('MMM-DD')
         : '';
