@@ -41,8 +41,6 @@ const PlantList = ({navigation}) => {
                 }
                 return {...plant, lastWatered: ''};
             });
-            console.log('update ');
-            console.log(updatedPlants);
             setPlants(updatedPlants);
         }
     }, [data]);

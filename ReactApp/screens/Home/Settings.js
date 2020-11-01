@@ -181,7 +181,7 @@ const styles = StyleSheet.create({
     deleteButtonText: {
         color: 'red',
         fontSize: 24,
-        marginTop: 80,
+        marginTop: 100,
     },
 });
 
