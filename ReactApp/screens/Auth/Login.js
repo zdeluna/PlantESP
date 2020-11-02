@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useContext, useState} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import FormField from '../../components/FormField';
 import formData from '../../hooks/formData';
@@ -13,10 +13,18 @@ const Login = ({navigation}) => {
         password: '',
     });
 
+    const [showAlert, setShowAlert] = useState(false);
     const {login} = useContext(AuthContext);
 
-    const handleLogInUser = () => {
-        login(formValues.login, formValues.password);
+    const handleLogInUser = async () => {
+        const response = await login(formValues.login, formValues.password);
+        console.log('Log in response: ');
+        console.log(response);
+    };
+
+    const ShowAlert = () => {
+        if (showAlert) return <AlertBanner message={'Error'} />;
+        else return null;
     };
 
     return (
@@ -56,6 +64,7 @@ const Login = ({navigation}) => {
                     navigation.navigate('SignUp');
                 }}
             />
+            <ShowAlert />
         </View>
     );
 };
