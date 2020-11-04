@@ -17,9 +17,14 @@ const Login = ({navigation}) => {
     const {login} = useContext(AuthContext);
 
     const handleLogInUser = async () => {
-        const response = await login(formValues.login, formValues.password);
-        console.log('Log in response: ');
-        console.log(response);
+        try {
+            const response = await login(formValues.login, formValues.password);
+            console.log('Log in response: ');
+            console.log(response);
+        } catch (error) {
+            console.log('error in login in handle');
+            console.log(error);
+        }
     };
 
     const ShowAlert = () => {

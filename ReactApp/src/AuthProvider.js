@@ -18,11 +18,7 @@ export const AuthProvider = ({children}) => {
     const [user, setUser] = useState(null);
 
     const [signInUser] = useMutation(LOG_IN_USER, {
-        async onError(error) {
-            console.log('ERROR IN SIGNING IN');
-            console.log(error);
-            return error;
-        },
+        errorPolicy: 'all',
         async onCompleted({signInUser}) {
             AsyncStorage.setItem('user', signInUser.token);
             setUser(signInUser.token);
@@ -34,7 +30,7 @@ export const AuthProvider = ({children}) => {
             value={{
                 user,
                 login: async (login, password) => {
-                    return await signInUser({
+                    await signInUser({
                         variables: {
                             login: login,
                             password: password,
