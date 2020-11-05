@@ -1,19 +1,26 @@
 import React from 'react';
-import {Text, View} from 'react-native';
+import {Text, View, StyleSheet} from 'react-native';
+import {Center} from './Center';
 
-export const AlertBanner = ({message}) => {
+const AlertBanner = ({message}) => {
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>{message}</Text>
+            <Center>
+                <Text style={styles.text}>{message}</Text>
+            </Center>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: '#ffffff',
+        backgroundColor: 'red',
+        marginTop: 40,
+        height: 30,
     },
     text: {
-        color: '#ffffff',
+        color: '#333333',
     },
 });
+
+export default AlertBanner;

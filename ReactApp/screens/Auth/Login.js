@@ -6,6 +6,7 @@ import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
 import {AuthContext} from '../../src/AuthProvider';
+import AlertBanner from '../../components/AlertBanner';
 
 const Login = ({navigation}) => {
     const {formValues, handleFormValueChange, setFormValues} = formData({
@@ -22,13 +23,14 @@ const Login = ({navigation}) => {
             console.log('Log in response: ');
             console.log(response);
         } catch (error) {
-            console.log('error in login in handle');
-            console.log(error);
+            if (error.message == 'GraphQL error: Password is not valid') {
+                setShowAlert('Password is not valid');
+            }
         }
     };
 
     const ShowAlert = () => {
-        if (showAlert) return <AlertBanner message={'Error'} />;
+        if (showAlert) return <AlertBanner message={showAlert} />;
         else return null;
     };
 
