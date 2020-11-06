@@ -23,8 +23,13 @@ const Login = ({navigation}) => {
             console.log('Log in response: ');
             console.log(response);
         } catch (error) {
-            if (error.message == 'GraphQL error: Password is not valid') {
-                setShowAlert('Password is not valid');
+            switch (error.message) {
+                case 'GraphQL error: Password is not valid':
+                    setShowAlert('Password is not valid');
+                    break;
+                case 'GraphQL error: No user was found':
+                    setShowAlert('No user was not found');
+                    break;
             }
         }
     };
