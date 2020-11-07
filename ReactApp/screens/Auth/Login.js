@@ -20,8 +20,6 @@ const Login = ({navigation}) => {
     const handleLogInUser = async () => {
         try {
             const response = await login(formValues.login, formValues.password);
-            console.log('Log in response: ');
-            console.log(response);
         } catch (error) {
             switch (error.message) {
                 case 'GraphQL error: Password is not valid':

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import FormField from '../../components/FormField';
 import formData from '../../hooks/formData';
 import {Button} from 'react-native-elements';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {CREATE_USER} from '../../graphql/mutations/user/createUser';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
+import {AuthContext} from '../../src/AuthProvider';
 
 const SignUp = ({navigation}) => {
     const {formValues, handleFormValueChange, setFormValues} = formData({
@@ -16,21 +16,26 @@ const SignUp = ({navigation}) => {
     });
 
     const client = useApolloClient();
+    const {signUp} = useContext(AuthContext);
 
-    const [createUser] = useMutation(CREATE_USER, {
-        async onCompleted({createUser}) {
-            await AsyncStorage.setItem('token', createUser.token);
-        },
-    });
-
-    const handleCreateUser = () => {
-        createUser({
-            variables: {
-                username: formValues.username,
-                email: formValues.email,
-                password: formValues.password,
-            },
-        });
+    const handleCreateUser = async () => {
+        try {
+            const response = await signUp(
+                formValues.username,
+                formValues.email,
+                formValues.password,
+            );
+        } catch (error) {
+            console.log('error in sign up ');
+            switch (error.message) {
+                case 'GraphQL error: Password is not valid':
+                    setShowAlert('Password is not valid');
+                    break;
+                case 'GraphQL error: No user was found':
+                    setShowAlert('No user was not found');
+                    break;
+            }
+        }
     };
 
     return (

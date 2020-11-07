@@ -10,6 +10,7 @@ import {from} from 'apollo-boost';
 import AsyncStorage from '@react-native-community/async-storage';
 import {Providers} from './Providers';
 import {LOG_IN_USER} from '../graphql/mutations/user/signInUser';
+import {CREATE_USER} from '../graphql/mutations/user/createUser';
 
 export const AuthContext = React.createContext({});
 
@@ -20,8 +21,16 @@ export const AuthProvider = ({children}) => {
     const [signInUser] = useMutation(LOG_IN_USER, {
         errorPolicy: 'all',
         async onCompleted({signInUser}) {
-            AsyncStorage.setItem('user', signInUser.token);
+            await AsyncStorage.setItem('user', signInUser.token);
             setUser(signInUser.token);
+        },
+    });
+
+    const [createUser] = useMutation(CREATE_USER, {
+        errorPolicy: 'all',
+        async onCompleted({createUser}) {
+            await AsyncStorage.setItem('token', createUser.token);
+            setUser(createUser.token);
         },
     });
 
@@ -40,6 +49,15 @@ export const AuthProvider = ({children}) => {
                 logout: () => {
                     setUser(null);
                     AsyncStorage.removeItem('user');
+                },
+                signUp: async (username, email, password) => {
+                    await createUser({
+                        variables: {
+                            username: username,
+                            email: email,
+                            password: password,
+                        },
+                    });
                 },
             }}>
             {children}
