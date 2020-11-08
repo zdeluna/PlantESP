@@ -29,7 +29,7 @@ export const AuthProvider = ({children}) => {
     const [createUser] = useMutation(CREATE_USER, {
         errorPolicy: 'all',
         async onCompleted({createUser}) {
-            await AsyncStorage.setItem('token', createUser.token);
+            await AsyncStorage.setItem('user', createUser.token);
             setUser(createUser.token);
         },
     });

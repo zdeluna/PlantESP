@@ -1,4 +1,4 @@
-import React, {useContext} from 'react';
+import React, {useState, useContext} from 'react';
 import {View, Text, StyleSheet} from 'react-native';
 import FormField from '../../components/FormField';
 import formData from '../../hooks/formData';
@@ -7,6 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {useMutation, useApolloClient} from '@apollo/react-hooks';
 import AsyncStorage from '@react-native-community/async-storage';
 import {AuthContext} from '../../src/AuthProvider';
+import AlertBanner from '../../components/AlertBanner';
 
 const SignUp = ({navigation}) => {
     const {formValues, handleFormValueChange, setFormValues} = formData({
@@ -15,7 +16,7 @@ const SignUp = ({navigation}) => {
         password: '',
     });
 
-    const client = useApolloClient();
+    const [showAlert, setShowAlert] = useState('');
     const {signUp} = useContext(AuthContext);
 
     const handleCreateUser = async () => {
@@ -26,16 +27,23 @@ const SignUp = ({navigation}) => {
                 formValues.password,
             );
         } catch (error) {
-            console.log('error in sign up ');
             switch (error.message) {
-                case 'GraphQL error: Password is not valid':
-                    setShowAlert('Password is not valid');
+                case 'GraphQL error: Username already exists.':
+                    setShowAlert('Username already exists.');
                     break;
-                case 'GraphQL error: No user was found':
-                    setShowAlert('No user was not found');
+                case 'GraphQL error: Email already in use.':
+                    setShowAlert('Email already in use.');
+                    break;
+                default:
+                    setShowAlert('Error in request.');
                     break;
             }
         }
+    };
+
+    const ShowAlert = () => {
+        if (showAlert) return <AlertBanner message={showAlert} />;
+        else return null;
     };
 
     return (
@@ -82,6 +90,7 @@ const SignUp = ({navigation}) => {
                     navigation.navigate('Login');
                 }}
             />
+            <ShowAlert />
         </View>
     );
 };

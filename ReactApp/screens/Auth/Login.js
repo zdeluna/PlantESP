@@ -14,7 +14,7 @@ const Login = ({navigation}) => {
         password: '',
     });
 
-    const [showAlert, setShowAlert] = useState(false);
+    const [showAlert, setShowAlert] = useState('');
     const {login} = useContext(AuthContext);
 
     const handleLogInUser = async () => {
@@ -22,11 +22,11 @@ const Login = ({navigation}) => {
             const response = await login(formValues.login, formValues.password);
         } catch (error) {
             switch (error.message) {
-                case 'GraphQL error: Password is not valid':
-                    setShowAlert('Password is not valid');
+                case 'GraphQL error: Password is not valid.':
+                    setShowAlert('Password is not valid.');
                     break;
-                case 'GraphQL error: No user was found':
-                    setShowAlert('No user was not found');
+                case 'GraphQL error: No user was found.':
+                    setShowAlert('No user was not found.');
                     break;
             }
         }

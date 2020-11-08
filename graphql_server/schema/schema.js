@@ -75,7 +75,7 @@ const schema = gql`
     }
 
     type Mutation {
-        createUser(email: String!, username: String!, password: String!): Token
+        createUser(email: String!, username: String!, password: String!): Token!
         signInUser(login: String!, password: String!): Token!
         waterPlant(id: ID!): WaterPlantResponse
         createPlant(name: String!): CreatePlantResponse

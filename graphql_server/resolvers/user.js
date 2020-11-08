@@ -18,20 +18,25 @@ const getUser = async args => {
 };
 
 const createUser = async ({ username, email, password }, { secret }) => {
-    try {
-        const { User } = await connectToDatabase();
-        const user = await User.create({
-            username,
-            email,
-            password
-        });
+    const { User } = await connectToDatabase();
 
-        return {
-            token: await createToken(user, secret, "30m")
-        };
-    } catch (error) {
-        console.error("Unable to connect to the database:", error);
+    if (await User.findOne({ where: { username: username } })) {
+        throw new UserInputError("Username already exists.");
     }
+
+    if (await User.findOne({ where: { email: email } })) {
+        throw new UserInputError("Email already in use.");
+    }
+
+    let user = await User.create({
+        username,
+        email,
+        password
+    });
+
+    return {
+        token: await createToken(user, secret, "30m")
+    };
 };
 
 const signInUser = async ({ login, password }, { secret }) => {
@@ -39,13 +44,13 @@ const signInUser = async ({ login, password }, { secret }) => {
 
     const user = await User.findByLogin(login);
     if (!user) {
-        throw new UserInputError("No user was found");
+        throw new UserInputError("No user was found.");
     }
 
     const isValid = await user.validatePassword(password);
 
     if (!isValid) {
-        throw new AuthenticationError("Password is not valid");
+        throw new AuthenticationError("Password is not valid.");
     }
 
     return { token: createToken(user, secret, "30m") };
