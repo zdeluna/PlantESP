@@ -28,6 +28,9 @@ const Login = ({navigation}) => {
                 case 'GraphQL error: No user was found.':
                     setShowAlert('No user was not found.');
                     break;
+                default:
+                    setShowAlert('Error in request.');
+                    break;
             }
         }
     };
